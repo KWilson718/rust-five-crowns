@@ -1,5 +1,4 @@
 # Five Crowns from the Command Line:
------
 
 ## Core Mechanics:
 
@@ -68,7 +67,6 @@
 - All points of cards not in groups are added up and added to the overall scoreboard, with cards in groups equalling zero
 
 # How it Works
----
 
 ## Cards
 
