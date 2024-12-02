@@ -1,5 +1,8 @@
 use std::io;
 
+mod types;
+use types::{Suit, Value, Card};
+
 fn main() {
 
     // The While loop in this instance is used to simulate a potentially multi-game long session of usage, or the ability to read the rules & return to play
@@ -55,3 +58,4 @@ fn menu() -> u8 {
         }
     }
 }
+
