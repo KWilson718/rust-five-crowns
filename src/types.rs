@@ -45,18 +45,18 @@ impl Card {
         }
         
         match self.value{
-            Suit::Three => println!("Its Value is Three"),
-            Suit::Four => println!("Its Value is Four"),
-            Suit::Five => println!("Its Value is Five"),
-            Suit::Six => println!("Its Value is Six"),
-            Suit::Seven => println!("Its Value is Seven"),
-            Suit::Eight => println!("Its Value is Eight"),
-            Suit::Nine => println!("Its Value is Nine"),
-            Suit::Ten => println!("Its Value is Ten"),
-            Suit::Jack => println!("Its Value is Eleven"),
-            Suit::Queen => println!("Its Value is Twelve"),
-            Suit::King => println!("Its Value is Thirteen"),
-            Suit::Wild => println!("It can Represent any Value"),
+            Value::Three => println!("Its Value is Three"),
+            Value::Four => println!("Its Value is Four"),
+            Value::Five => println!("Its Value is Five"),
+            Value::Six => println!("Its Value is Six"),
+            Value::Seven => println!("Its Value is Seven"),
+            Value::Eight => println!("Its Value is Eight"),
+            Value::Nine => println!("Its Value is Nine"),
+            Value::Ten => println!("Its Value is Ten"),
+            Value::Jack => println!("Its Value is Eleven"),
+            Value::Queen => println!("Its Value is Twelve"),
+            Value::King => println!("Its Value is Thirteen"),
+            Value::Wild => println!("It can Represent any Value"),
         }
 
         println!("The Numeric Value is: {}", self.numeric_value);

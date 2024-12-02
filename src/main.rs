@@ -19,6 +19,9 @@ fn main() {
             0=>still_playing = false,
             1=>println!("\nPlay Option Selected, Launching Game\n"),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
+            3=>println!("\nPlay Test Round Selected, Loading Test Round\n"),
+            4=>println!("\nCreate Deck Selected, Building Deck\n"),
+            5=>println!("\nCreate Test Card Selected, Generating Card\n"),
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
     }
@@ -31,7 +34,7 @@ fn main() {
 // u8 is the Integer type of choice since it is a very small number, and the menu selections make sense to not allow or use negative numbers
 fn menu() -> u8 {
     println!("Please Enter an Option Below:");
-    println!("1 - Play Five Crowns\n2 - How To Play?\n0 - Exit Game");
+    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Create Deck\n5 - Create Test Card\n0 - Exit Game");
 
     // Declare `input_selection` as a String
     let mut input_selection = String::new();
@@ -44,7 +47,7 @@ fn menu() -> u8 {
     // Trim and parse the input into a u8
     match input_selection.trim().parse::<u8>() {
         Ok(value) => {
-            if value < 3 {
+            if value < 6 {
                 return value;
             }
             else {
@@ -58,4 +61,3 @@ fn menu() -> u8 {
         }
     }
 }
-
