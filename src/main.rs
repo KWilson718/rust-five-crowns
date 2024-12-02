@@ -20,7 +20,7 @@ fn main() {
         }
     }
 
-    println!("Exit Option Selected - Have a Great Day!!!"); // Exit Message to show that program exited correctly (and wish user a good day)
+    println!("Exit Option Selected - Have a Great Day!!!\n"); // Exit Message to show that program exited correctly (and wish user a good day)
 }
 
 // Recursive Function to get a u8 Integer representing a menu selection
@@ -28,7 +28,7 @@ fn main() {
 // u8 is the Integer type of choice since it is a very small number, and the menu selections make sense to not allow or use negative numbers
 fn menu() -> u8 {
     println!("Please Enter an Option Below:");
-    println!("1 - Play Five Crowns\n2 - How To Play?\n0 - Exit Game\n");
+    println!("1 - Play Five Crowns\n2 - How To Play?\n0 - Exit Game");
 
     // Declare `input_selection` as a String
     let mut input_selection = String::new();
@@ -40,9 +40,17 @@ fn menu() -> u8 {
 
     // Trim and parse the input into a u8
     match input_selection.trim().parse::<u8>() {
-        Ok(value) => value,
+        Ok(value) => {
+            if value < 3 {
+                return value;
+            }
+            else {
+                println!("\nInvalid Menu Selection, Please Enter a Number From The List.\n{} Is Not A Valid Option\n", value);
+                return menu();
+            }
+        },
         Err(_) => {
-            println!("\nInvalid input! Please enter a number.\n");
+            println!("\nInvalid Input! Please enter a number.\n");
             menu() // Recursively call `menu` to ask for input again until valid option provided
         }
     }
