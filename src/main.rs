@@ -120,5 +120,6 @@ fn create_deck() {
         card.describe();
     }
 
+    // Prints out the size of the deck to verify that the right number of cards were added
     println!("The Deck consists of {} Cards\n", sorted_deck.len());
 }
