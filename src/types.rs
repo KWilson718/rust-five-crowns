@@ -1,3 +1,4 @@
+#[derive(Copy, Clone)]
 pub enum Suit {
     Wild,
     Star,
@@ -7,6 +8,7 @@ pub enum Suit {
     Heart,
 }
 
+#[derive(Copy, Clone)]
 pub enum Value {
     Three,
     Four,

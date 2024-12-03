@@ -82,15 +82,43 @@ fn create_deck() {
     let mut sorted_deck: Vec<Card> = Vec::new();
 
     // Iterates through creating a deck twice and adding it to the final deck
-    for i in 0..2 {
+    for _ in 0..2 {
         // Adds in the three wild cards per deck
-        for j in 0..3 {
+        for _ in 0..3 {
             sorted_deck.push(create_card(Suit::Wild, Value::Wild, 50));
         }
+
+        // Arrays used to store the various values that matter for a deck, which will be iterated through to generate a deck
+        // The array structure is used since it's fixed size and will be very efficient to run through
+        // Additionally, the tuple is used for the value and the numeric representation to further add efficiency to the data that is hard-coded to create the deck
+        let suits = [Suit::Star, Suit::Spade, Suit::Club, Suit::Diamond, Suit::Heart];
+        let values = [
+            (Value::Three, 3),
+            (Value::Four, 4),
+            (Value::Five, 5),
+            (Value::Six, 6),
+            (Value::Seven, 7),
+            (Value::Eight, 8),
+            (Value::Nine, 9),
+            (Value::Ten, 10),
+            (Value::Jack, 11),
+            (Value::Queen, 12),
+            (Value::King, 13),
+        ];
+
+        // This group of nested for loops goes through and generates each different card to then put into the deck.
+        for suit in suits {
+            for (value, rank) in values.iter() {
+                sorted_deck.push(create_card(suit, *value, *rank));
+            }
+        }
+        
     }
 
     // Prints out the deck for viewing of the construction
     for card in &sorted_deck {
         card.describe();
     }
+
+    println!("The Deck consists of {} Cards\n", sorted_deck.len());
 }
