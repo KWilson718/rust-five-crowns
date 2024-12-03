@@ -59,7 +59,7 @@ impl Card {
             Value::Wild => println!("It can Represent any Value"),
         }
 
-        println!("The Numeric Value is: {}", self.numeric_value);
+        println!("The Numeric Value is: {}\n", self.numeric_value);
 
     }
 }
