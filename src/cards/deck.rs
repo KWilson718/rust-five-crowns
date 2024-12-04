@@ -7,18 +7,18 @@ fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
     let alpha_value: String;
 
     alpha_value = match numeric_value {
-        3 => " 3".to_string(),
-        4 => " 4".to_string(),
-        5 => " 5".to_string(),
-        6 => " 6".to_string(),
-        7 => " 7".to_string(),
-        8 => " 8".to_string(),
-        9 => " 9".to_string(),
+        3 => "3".to_string(),
+        4 => "4".to_string(),
+        5 => "5".to_string(),
+        6 => "6".to_string(),
+        7 => "7".to_string(),
+        8 => "8".to_string(),
+        9 => "9".to_string(),
         10 => "10".to_string(),
-        11 => " J".to_string(),
-        12 => " Q".to_string(),
-        13 => " K".to_string(),
-        50 => " W".to_string(),
+        11 => "J".to_string(),
+        12 => "Q".to_string(),
+        13 => "K".to_string(),
+        50 => "W".to_string(),
         _ => "Invalid".to_string(), // Handle unexpected numeric values gracefully
     };
 

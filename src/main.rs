@@ -89,12 +89,18 @@ fn display_cards(deck: Vec<Card>) {
     for card in deck {
         card.describe();
 
+        // Ensure alpha_value is exactly two characters wide
+        let alpha_display = format!("{:>2}", card.alpha_value);
+
+        // Get the suit as a string and center it in a field of 10 characters
+        let suit_display = format!("{:^8}", format!("{:?}", card.suit));
+
         println!("----------");
-        println!("|{}      |", card.alpha_value);
+        println!("|{}      |", alpha_display); // Use the formatted alpha_display here
         println!("|        |");
+        println!("|{}|", suit_display);         // Insert the formatted suit display here
         println!("|        |");
-        println!("|        |");
-        println!("|     {} |", card.alpha_value);
+        println!("|     {} |", alpha_display); // Use the formatted alpha_display here
         println!("----------");
     }
 }
