@@ -63,7 +63,7 @@ fn menu() -> u8 {
                 return value;
             }
             else {
-                println!("\nInvalid Menu Selection, Please Enter a Number From The List.\n{} Is Not A Valid Option\n", value);
+                println!("\nInvalid Menu Selection, Please Enter a Number From The List.\n - {} Is Not A Valid Option\n", value);
                 return menu();
             }
         },
