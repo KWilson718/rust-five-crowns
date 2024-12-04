@@ -1,7 +1,7 @@
 use std::io;
 
-mod types;
-use types::{Suit, Value, Card};
+mod cards;
+use cards::types::{Suit, Value, Card};
 
 fn main() {
 
