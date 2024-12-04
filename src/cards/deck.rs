@@ -1,3 +1,6 @@
+use rand::thread_rng;
+use rand::seq::SliceRandom;
+
 use super::types::{Suit, Value, Card};
 
 fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
@@ -50,4 +53,15 @@ pub fn create_deck() -> Vec<Card>{
     }
 
     return sorted_deck;    
+}
+
+pub fn shuffle_deck(mut deck: Vec<Card>) -> Vec<Card> {
+    // Gets a random number generation value based off of the thread_rng() function from the rand dependency
+    // This allows for a more random version of a random number
+    let mut rng = thread_rng(); 
+
+    // shuffles the deck based on the rand dependency's interactions with the vector using the previously generated random numnber generator
+    deck.shuffle(&mut rng);
+
+    return deck;
 }

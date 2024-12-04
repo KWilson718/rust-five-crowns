@@ -2,7 +2,7 @@ use std::io;
 
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
-use cards::deck::{create_deck};
+use cards::deck::{create_deck, shuffle_deck};
 
 fn main() {
 
@@ -23,7 +23,7 @@ fn main() {
             3=>println!("\nPlay Test Round Selected, Loading Test Round\n"),
             4=>println!("\nCreate Deck Selected, Building Deck\n"),
             5=>{
-                println!("\nCreate Test Card Selected, Generating Card\n");
+                println!("\n---------- Create Test Card Selected, Generating Card ----------\n");
                 let sorted_deck = create_deck();
 
                 // Prints out the deck for viewing of the construction
@@ -33,6 +33,14 @@ fn main() {
 
                 // Prints out the size of the deck to verify that the right number of cards were added
                 println!("The Deck consists of {} Cards\n", sorted_deck.len());
+
+                println!("---------- Shuffling the Deck ----------");
+
+                let shuffled_deck = shuffle_deck(sorted_deck);
+
+                for card in &shuffled_deck {
+                    card.describe();
+                }
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
