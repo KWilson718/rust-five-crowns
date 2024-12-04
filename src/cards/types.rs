@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Suit {
     Wild,
     Star,
@@ -8,7 +8,7 @@ pub enum Suit {
     Heart,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Value {
     Three,
     Four,
@@ -25,43 +25,26 @@ pub enum Value {
 }
 
 pub struct Card {
-    suit: Suit,
-    value: Value,
-    numeric_value: u8,
+    pub suit: Suit,
+    pub value: Value,
+    pub numeric_value: u8,
+    pub alpha_value: String,
 }
 
 impl Card {
-    pub fn new(suit: Suit, value: Value, numeric_value: u8) -> Self{
-        Card {suit, value, numeric_value}
+    pub fn new(suit: Suit, value: Value, numeric_value: u8, alpha_value: &str) -> Self {
+        Card {
+            suit,
+            value,
+            numeric_value,
+            alpha_value: alpha_value.to_string(),
+        }
     }
 
     pub fn describe(&self) {
-
-        match self.suit {
-            Suit::Wild => println!("This is a Wild Card"),
-            Suit::Star => println!("Suit is Star"),
-            Suit::Spade => println!("Suit is Spade"),
-            Suit::Club => println!("Suit is Club"),
-            Suit::Diamond => println!("Suit is Diamond"),
-            Suit::Heart => println!("Suit is Heart"),
-        }
-        
-        match self.value{
-            Value::Three => println!("Its Value is Three"),
-            Value::Four => println!("Its Value is Four"),
-            Value::Five => println!("Its Value is Five"),
-            Value::Six => println!("Its Value is Six"),
-            Value::Seven => println!("Its Value is Seven"),
-            Value::Eight => println!("Its Value is Eight"),
-            Value::Nine => println!("Its Value is Nine"),
-            Value::Ten => println!("Its Value is Ten"),
-            Value::Jack => println!("Its Value is Eleven"),
-            Value::Queen => println!("Its Value is Twelve"),
-            Value::King => println!("Its Value is Thirteen"),
-            Value::Wild => println!("It can Represent any Value"),
-        }
-
-        println!("The Numeric Value is: {}\n", self.numeric_value);
-
+        println!("Suit: {:?}", self.suit);
+        println!("Value: {:?}", self.value);
+        println!("Numeric Value: {}", self.numeric_value);
+        println!("Alphabetical Value: {}", self.alpha_value);
     }
 }

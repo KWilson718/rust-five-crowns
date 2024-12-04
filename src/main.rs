@@ -3,6 +3,7 @@ use std::io;
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
 use cards::deck::{create_deck, shuffle_deck};
+use crate::cards::types::{Card};
 
 fn main() {
 
@@ -27,9 +28,9 @@ fn main() {
                 let sorted_deck = create_deck();
 
                 // Prints out the deck for viewing of the construction
-                for card in &sorted_deck {
-                    card.describe();
-                }
+                // for card in &sorted_deck {
+                //     card.describe();
+                // }
 
                 // Prints out the size of the deck to verify that the right number of cards were added
                 println!("The Deck consists of {} Cards\n", sorted_deck.len());
@@ -38,9 +39,11 @@ fn main() {
 
                 let shuffled_deck = shuffle_deck(sorted_deck);
 
-                for card in &shuffled_deck {
-                    card.describe();
-                }
+                // for card in &shuffled_deck {
+                //     card.describe();
+                // }
+
+                display_cards(shuffled_deck);
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
@@ -79,5 +82,19 @@ fn menu() -> u8 {
             println!("\nInvalid Input! Please enter a number.\n");
             menu() // Recursively call `menu` to ask for input again until valid option provided
         }
+    }
+}
+
+fn display_cards(deck: Vec<Card>) {
+    for card in deck {
+        card.describe();
+
+        println!("----------");
+        println!("|{}      |", card.alpha_value);
+        println!("|        |");
+        println!("|        |");
+        println!("|        |");
+        println!("|     {} |", card.alpha_value);
+        println!("----------");
     }
 }
