@@ -1,11 +1,17 @@
 # Items Left to Complete
 
 - Display cards to console
-- Create Card Types
-  - Using ENUM for Value & Suit quite Likely
+- Create Deck Shuffle Feature
 - Create Test Round
 - Create Game Sequence
 - Create Deck Functionality
-- Create Discard Functionality
+  - Draw
+- Create Discard Pile Functionality
+  - Discard Card to Discard Pile
+  - Draw Top of Discard Pile
 - Create Hand Functionality
+  - Draw
+  - Compare
+  - Lay Down
+  - Discard
 - Create Computer Player to Optimize Things
