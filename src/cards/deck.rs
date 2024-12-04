@@ -6,7 +6,7 @@ fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
     return card;
 }
 
-pub fn create_deck() {
+pub fn create_deck() -> Vec<Card>{
     // Each deck has 6 jokers, and then 2 copies of every other possible card
     // Per the rules, there are two sets of 58 cards, with one of each possible type + three jokers, but it combines to the above for the actual gameplay
     // To simulate a brand new set of decks, the sorted deck will be created by essentially two of the smaller decks being stacked on top of eachother uising nested loops
@@ -46,15 +46,8 @@ pub fn create_deck() {
             for (value, rank) in values.iter() {
                 sorted_deck.push(create_card(suit, *value, *rank));
             }
-        }
-        
+        }    
     }
 
-    // Prints out the deck for viewing of the construction
-    for card in &sorted_deck {
-        card.describe();
-    }
-
-    // Prints out the size of the deck to verify that the right number of cards were added
-    println!("The Deck consists of {} Cards\n", sorted_deck.len());
+    return sorted_deck;    
 }

@@ -24,7 +24,15 @@ fn main() {
             4=>println!("\nCreate Deck Selected, Building Deck\n"),
             5=>{
                 println!("\nCreate Test Card Selected, Generating Card\n");
-                create_deck();
+                let sorted_deck = create_deck();
+
+                // Prints out the deck for viewing of the construction
+                for card in &sorted_deck {
+                    card.describe();
+                }
+
+                // Prints out the size of the deck to verify that the right number of cards were added
+                println!("The Deck consists of {} Cards\n", sorted_deck.len());
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
