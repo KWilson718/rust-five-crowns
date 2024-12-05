@@ -82,7 +82,7 @@ pub fn shuffle_deck(mut deck: Vec<Card>) -> Vec<Card> {
     return deck;
 }
 
-pub fn display_cards(deck: Vec<Card>, cards_per_row: usize) {
+pub fn display_cards(deck: &Vec<Card>, cards_per_row: usize) {
     // Prepare rows for output
     let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
 
@@ -109,4 +109,28 @@ pub fn display_cards(deck: Vec<Card>, cards_per_row: usize) {
             rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
         }
     }
+}
+
+pub fn draw_card(deck: &mut Vec<Card>) -> Card {
+    // Check if the deck is empty
+    if deck.is_empty() {
+        panic!("Cannot draw from an empty deck!");
+    }
+
+    // Use pop to remove and return the last card from the deck
+    let card = deck.pop().expect("Deck should not be empty"); // Safe because we checked for empty above
+    return card;
+}
+
+pub fn draw_hand(deck: &mut Vec<Card>, hand_size: u8) -> Vec<Card> {
+    let mut hand: Vec<Card> = Vec::new();
+
+    // Draw `hand_size` cards
+    for _ in 0..hand_size {
+        // Draw a card from the deck and push it to the hand
+        let card = draw_card(deck);
+        hand.push(card);
+    }
+
+    return hand; // Return the hand
 }

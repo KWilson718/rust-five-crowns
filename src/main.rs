@@ -2,7 +2,7 @@ use std::io;
 
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
-use cards::deck::{create_deck, shuffle_deck, display_cards};
+use cards::deck::{create_deck, shuffle_deck, display_cards, draw_hand, draw_card};
 use crate::cards::types::{Card};
 
 fn main() {
@@ -21,12 +21,12 @@ fn main() {
             0=>still_playing = false,
             1=>println!("\nPlay Option Selected, Launching Game\n"),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
-            3=>println!("\nPlay Test Round Selected, Loading Test Round\n"),
+            3=>test_round(),
             4=>{
                 println!("\nCreate Deck Selected, Building Deck\n");
                 let mut deck = create_deck();
                 deck = shuffle_deck(deck);
-                display_cards(deck, 8);
+                display_cards(&deck, 8);
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
@@ -67,3 +67,27 @@ fn menu() -> u8 {
         }
     }
 }
+
+fn test_round() {
+    println!("Test Round Selected, Creating Basic Deck & Shuffling\n");
+
+    let mut deck = create_deck();
+    deck = shuffle_deck(deck);
+
+
+    println!("Deck is Shuffled & Ready, Drawing Hand\n");
+
+    let mut hand = draw_hand(&mut deck, 3);
+
+    println!("Drew Following Hand\n");
+
+    display_cards(&hand, 3);
+
+    println!("Drawing a card test:");
+
+    hand.push(draw_card(&mut deck));
+
+    println!("Card drawn makes hand into the following:\n");
+
+    display_cards(&hand, 4);
+}   
