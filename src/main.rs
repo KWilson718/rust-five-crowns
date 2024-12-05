@@ -43,7 +43,7 @@ fn main() {
                 //     card.describe();
                 // }
 
-                display_cards(shuffled_deck);
+                display_cards(shuffled_deck, 5);
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
@@ -85,22 +85,31 @@ fn menu() -> u8 {
     }
 }
 
-fn display_cards(deck: Vec<Card>) {
-    for card in deck {
-        card.describe();
+fn display_cards(deck: Vec<Card>, cards_per_row: usize) {
+    // Prepare rows for output
+    let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
 
-        // Ensure alpha_value is exactly two characters wide
+    for (i, card) in deck.iter().enumerate() {
+        // Format card components
         let alpha_display = format!("{:>2}", card.alpha_value);
-
-        // Get the suit as a string and center it in a field of 10 characters
         let suit_display = format!("{:^8}", format!("{:?}", card.suit));
 
-        println!("----------");
-        println!("|{}      |", alpha_display); // Use the formatted alpha_display here
-        println!("|        |");
-        println!("|{}|", suit_display);         // Insert the formatted suit display here
-        println!("|        |");
-        println!("|     {} |", alpha_display); // Use the formatted alpha_display here
-        println!("----------");
+        // Add this card's rows to the output rows
+        rows[0].push_str("---------- ");
+        rows[1].push_str(&format!("|{}      | ", alpha_display));
+        rows[2].push_str("|        | ");
+        rows[3].push_str(&format!("|{}| ", suit_display));
+        rows[4].push_str("|        | ");
+        rows[5].push_str(&format!("|      {}| ", alpha_display));
+        rows[6].push_str("---------- ");
+
+        // Print rows if we've reached the limit per row or the end of the deck
+        if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
+            for row in &rows {
+                println!("{}", row.trim_end());
+            }
+            println!(); // Add a blank line between rows of cards
+            rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
+        }
     }
 }
