@@ -22,28 +22,11 @@ fn main() {
             1=>println!("\nPlay Option Selected, Launching Game\n"),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
             3=>println!("\nPlay Test Round Selected, Loading Test Round\n"),
-            4=>println!("\nCreate Deck Selected, Building Deck\n"),
-            5=>{
-                println!("\n---------- Create Test Card Selected, Generating Card ----------\n");
-                let sorted_deck = create_deck();
-
-                // Prints out the deck for viewing of the construction
-                // for card in &sorted_deck {
-                //     card.describe();
-                // }
-
-                // Prints out the size of the deck to verify that the right number of cards were added
-                println!("The Deck consists of {} Cards\n", sorted_deck.len());
-
-                println!("---------- Shuffling the Deck ----------");
-
-                let shuffled_deck = shuffle_deck(sorted_deck);
-
-                // for card in &shuffled_deck {
-                //     card.describe();
-                // }
-
-                display_cards(shuffled_deck, 5);
+            4=>{
+                println!("\nCreate Deck Selected, Building Deck\n");
+                let mut deck = create_deck();
+                deck = shuffle_deck(deck);
+                display_cards(deck, 8);
             },
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
@@ -57,7 +40,7 @@ fn main() {
 // u8 is the Integer type of choice since it is a very small number, and the menu selections make sense to not allow or use negative numbers
 fn menu() -> u8 {
     println!("Please Enter an Option Below:");
-    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Create Deck\n5 - Create Test Card\n0 - Exit Game");
+    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Create Deck\n0 - Exit Game");
 
     // Declare `input_selection` as a String
     let mut input_selection = String::new();
