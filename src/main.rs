@@ -2,7 +2,7 @@ use std::io;
 
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
-use cards::deck::{create_deck, shuffle_deck};
+use cards::deck::{create_deck, shuffle_deck, display_cards};
 use crate::cards::types::{Card};
 
 fn main() {
@@ -81,35 +81,6 @@ fn menu() -> u8 {
         Err(_) => {
             println!("\nInvalid Input! Please enter a number.\n");
             menu() // Recursively call `menu` to ask for input again until valid option provided
-        }
-    }
-}
-
-fn display_cards(deck: Vec<Card>, cards_per_row: usize) {
-    // Prepare rows for output
-    let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
-
-    for (i, card) in deck.iter().enumerate() {
-        // Format card components
-        let alpha_display = format!("{:>2}", card.alpha_value);
-        let suit_display = format!("{:^8}", format!("{:?}", card.suit));
-
-        // Add this card's rows to the output rows
-        rows[0].push_str("---------- ");
-        rows[1].push_str(&format!("|{}      | ", alpha_display));
-        rows[2].push_str("|        | ");
-        rows[3].push_str(&format!("|{}| ", suit_display));
-        rows[4].push_str("|        | ");
-        rows[5].push_str(&format!("|      {}| ", alpha_display));
-        rows[6].push_str("---------- ");
-
-        // Print rows if we've reached the limit per row or the end of the deck
-        if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
-            for row in &rows {
-                println!("{}", row.trim_end());
-            }
-            println!(); // Add a blank line between rows of cards
-            rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
         }
     }
 }
