@@ -1,6 +1,5 @@
 # Items Left to Complete
 
-- Display cards to console
 - Create Test Round
 - Create Game Sequence
 - Create Deck Functionality
