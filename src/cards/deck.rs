@@ -134,3 +134,7 @@ pub fn draw_hand(deck: &mut Vec<Card>, hand_size: u8) -> Vec<Card> {
 
     return hand; // Return the hand
 }
+
+pub fn discard_card(discard_pile: &mut Vec<Card>, card: Card) {
+    discard_pile.push(card);
+}

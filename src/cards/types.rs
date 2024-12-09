@@ -48,3 +48,14 @@ impl Card {
         println!("Alphabetical Value: {}", self.alpha_value);
     }
 }
+
+impl Clone for Card {
+    fn clone(&self) -> Self {
+        Card {
+            suit: self.suit,
+            value: self.value,
+            numeric_value: self.numeric_value,
+            alpha_value: self.alpha_value.clone(), // Clone the String
+        }
+    }
+}

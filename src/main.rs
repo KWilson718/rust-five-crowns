@@ -2,7 +2,7 @@ use std::io;
 
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
-use cards::deck::{create_deck, shuffle_deck, display_cards, draw_hand, draw_card};
+use cards::deck::{create_deck, shuffle_deck, display_cards, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card};
 
 fn main() {
@@ -93,6 +93,8 @@ fn test_round() {
 fn debug_test_round() {
     println!("Debug Test Round Selected, Creating Basic Deck & Shuffling\n");
 
+    let mut discard_pile: Vec<Card> = Vec::new();
+
     let mut deck = create_deck();
     deck = shuffle_deck(deck);
 
@@ -109,22 +111,27 @@ fn debug_test_round() {
 
     display_cards(&computer_hand, 3);
 
-    println!("Drawing a card test for both:");
+    let mut pre_lay_down: bool = true;
+    let mut test_turn_limit = 10;
 
-    player_hand.push(draw_card(&mut deck));
+    while pre_lay_down {
+        if player_turn(&mut player_hand, &mut deck, &mut discard_pile) {
+            pre_lay_down = false;
+        }
 
-    computer_hand.push(draw_card(&mut deck));
+        if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
+            pre_lay_down = false;
+        }
 
-    println!("Card drawn makes hand into the following:\n");
+        test_turn_limit -= 1;
 
-    display_cards(&player_hand, 4);
-
-    println!("Card drawn makes computer hand into the following:\n");
-
-    display_cards(&computer_hand, 4);
+        if test_turn_limit == 0 {
+            pre_lay_down = false;
+        }
+    }
 }   
 
-fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
+fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Vec<Card>) -> bool{
     // Draw Card, selecting between discard and draw pile
     // Display Options to Discard
     // Allow for Checking of Lay Down Capability
@@ -133,17 +140,48 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
     return false;
 }
 
-fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
-    // Draw Card from draw pile
-    // Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
-    // Check if can lay down, and lay the hand down if possible
+fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Vec<Card>) -> bool {
+    println!("Computer Hand at Start:");
+    display_cards(&hand, hand.len());
 
-    return false;
+    // Draw a card from the deck
+    println!("Drawing Card");
+    let card = draw_card(deck);
+    hand.push(card);
+
+    // Display hand after drawing
+    println!("Hand after drawing a card:");
+    display_cards(&hand, hand.len());
+
+    // Simulate discarding a card
+    if !hand.is_empty() {
+        let discard_index = optimized_computer_discard(hand);
+        let discarded_card = hand.remove(discard_index);
+        discard_card(discard_pile, discarded_card); // Pass the owned card
+        println!("Discarded a card:");
+        display_cards(&discard_pile, discard_pile.len());
+    } else {
+        println!("No cards to discard.");
+    }
+
+    let lay_down = check_if_lay_down();
+
+    println!("Finishing Turn with Hand:");
+    display_cards(hand, hand.len());
+
+    lay_down
 }
+
+
 
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
 fn check_if_lay_down() -> bool {
     return false;
+}
+
+// Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
+fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
+    return 0;
 }
 
 // Round Structure:
