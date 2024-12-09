@@ -22,12 +22,7 @@ fn main() {
             1=>println!("\nPlay Option Selected, Launching Game\n"),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
             3=>test_round(),
-            4=>{
-                println!("\nCreate Deck Selected, Building Deck\n");
-                let mut deck = create_deck();
-                deck = shuffle_deck(deck);
-                display_cards(&deck, 8);
-            },
+            4=>debug_test_round(),
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
     }
@@ -40,7 +35,7 @@ fn main() {
 // u8 is the Integer type of choice since it is a very small number, and the menu selections make sense to not allow or use negative numbers
 fn menu() -> u8 {
     println!("Please Enter an Option Below:");
-    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Create Deck\n0 - Exit Game");
+    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Play Debug Test Round\n0 - Exit Game");
 
     // Declare `input_selection` as a String
     let mut input_selection = String::new();
@@ -90,4 +85,38 @@ fn test_round() {
     println!("Card drawn makes hand into the following:\n");
 
     display_cards(&hand, 4);
+}   
+
+fn debug_test_round() {
+    println!("Debug Test Round Selected, Creating Basic Deck & Shuffling\n");
+
+    let mut deck = create_deck();
+    deck = shuffle_deck(deck);
+
+    println!("Deck is Shuffled & Ready, Dealing Cards\n");
+
+    let mut player_hand = draw_hand(&mut deck, 3);
+    let mut computer_hand = draw_hand(&mut deck, 3);
+
+    println!("Drew Following Hand\n");
+
+    display_cards(&player_hand, 3);
+
+    println!("Computer has Following Hand\n");
+
+    display_cards(&computer_hand, 3);
+
+    println!("Drawing a card test for both:");
+
+    player_hand.push(draw_card(&mut deck));
+
+    computer_hand.push(draw_card(&mut deck));
+
+    println!("Card drawn makes hand into the following:\n");
+
+    display_cards(&player_hand, 4);
+
+    println!("Card drawn makes computer hand into the following:\n");
+
+    display_cards(&computer_hand, 4);
 }   
