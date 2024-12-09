@@ -13,8 +13,10 @@ fn main() {
     while still_playing {
         println!("Welcome to Command Line Five Crowns"); // Welcome message when menu hit
 
+        let menu_string = "1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Play Debug Test Round\n0 - Exit Game";
+
         // Fetches the selection from the menu options
-        let selection_val = menu();
+        let selection_val = prompt_for_number(menu_string, 0, 4);
 
         // Switch case to handle menu entries
         match selection_val{
@@ -30,13 +32,14 @@ fn main() {
     println!("Exit Option Selected - Have a Great Day!!!\n"); // Exit Message to show that program exited correctly (and wish user a good day)
 }
 
-// Recursive Function to get a u8 Integer representing a menu selection
-// Recursion chosen to rapidly repeat the request until a valid option is found & returned
-// u8 is the Integer type of choice since it is a very small number, and the menu selections make sense to not allow or use negative numbers
-fn menu() -> u8 {
+// Prompt for Number Function is designed to be able to handle the various requests that occur for the player to enter in a number
+// Since this can be used for a menu, as well as for various instances in the turn, it has been abstracted into a function itself
+// This recursively calls itself until it can return a valid selection
+// u8 is the Integer type of choice since it is a very small number, and can be efficiently passed back and forth
+fn prompt_for_number (prompt: &str, min: u8, max: u8) -> u8 {
     println!("Please Enter an Option Below:");
-    println!("1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Play Debug Test Round\n0 - Exit Game");
-
+    println!("{}", prompt);
+    
     // Declare `input_selection` as a String
     let mut input_selection = String::new();
 
@@ -48,17 +51,17 @@ fn menu() -> u8 {
     // Trim and parse the input into a u8
     match input_selection.trim().parse::<u8>() {
         Ok(value) => {
-            if value < 6 {
+            if value <= max && value >= min {
                 return value;
             }
             else {
                 println!("\nInvalid Menu Selection, Please Enter a Number From The List.\n - {} Is Not A Valid Option\n", value);
-                return menu();
+                return prompt_for_number(prompt, min, max);
             }
         },
         Err(_) => {
             println!("\nInvalid Input! Please enter a number.\n");
-            menu() // Recursively call `menu` to ask for input again until valid option provided
+            prompt_for_number(prompt, min, max) // Recursively call `menu` to ask for input again until valid option provided
         }
     }
 }
@@ -126,12 +129,16 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
     // Display Options to Discard
     // Allow for Checking of Lay Down Capability
     // Return True if still going, False if Laid Down
+
+    return false;
 }
 
-fn computer_turn(hand: &mut Vec<Card>, deck: mut& Vec<Card>) -> bool{
+fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
     // Draw Card from draw pile
     // Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
     // Check if can lay down, and lay the hand down if possible
+
+    return false;
 }
 
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
