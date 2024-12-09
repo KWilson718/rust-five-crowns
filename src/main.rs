@@ -120,3 +120,31 @@ fn debug_test_round() {
 
     display_cards(&computer_hand, 4);
 }   
+
+fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>) -> bool{
+    // Draw Card, selecting between discard and draw pile
+    // Display Options to Discard
+    // Allow for Checking of Lay Down Capability
+    // Return True if still going, False if Laid Down
+}
+
+fn computer_turn(hand: &mut Vec<Card>, deck: mut& Vec<Card>) -> bool{
+    // Draw Card from draw pile
+    // Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
+    // Check if can lay down, and lay the hand down if possible
+}
+
+// Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
+fn check_if_lay_down() -> bool {
+    return false;
+}
+
+// Round Structure:
+
+// - Cards delt to player & computer
+// - Player draws card
+// - Player chooses card to discard, or discards & lays down
+// - Computer does the same
+// - Repeats until laydown happens
+// - Opponent has one more round & lays down what they have
+// - Points are tallied up
