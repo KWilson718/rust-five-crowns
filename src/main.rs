@@ -36,7 +36,7 @@ fn main() {
 // Since this can be used for a menu, as well as for various instances in the turn, it has been abstracted into a function itself
 // This recursively calls itself until it can return a valid selection
 // u8 is the Integer type of choice since it is a very small number, and can be efficiently passed back and forth
-fn prompt_for_number (prompt: &str, min: u8, max: u8) -> u8 {
+fn prompt_for_number(prompt: &str, min: u8, max: u8) -> u8 {
     println!("Please Enter an Option Below:");
     println!("{}", prompt);
     
@@ -137,15 +137,26 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Allow for Checking of Lay Down Capability
     // Return True if still going, False if Laid Down
 
+    println!("Player Turn Started:");
+
+    let draw_instructions_str = "Enter the corresponding number to the pile you want to draw from\n1 - Draw from Deck\n2 - Draw from Top of Discard Pile";
+    let draw_decision = prompt_for_number(draw_instructions_str, 1, 2);
+
+    if draw_decision == 1 {
+        
+    }
+    else {
+
+    }
+
+
     return false;
 }
 
 fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Vec<Card>) -> bool {
-    println!("Computer Hand at Start:");
-    display_cards(&hand, hand.len());
 
     // Draw a card from the deck
-    println!("Drawing Card");
+    println!("Computer Turn Started, Drawing Card");
     let card = draw_card(deck);
     hand.push(card);
 
