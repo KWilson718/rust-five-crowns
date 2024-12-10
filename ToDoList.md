@@ -8,4 +8,4 @@
 - Create Hand Functionality
   - Compare
   - Lay Down
-- Create Computer Player to Optimize Things
+- Create Optimized Selection for Discard 
