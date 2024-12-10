@@ -138,16 +138,26 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Return True if still going, False if Laid Down
 
     println!("Player Turn Started:");
+    println!("The Top of the Discard Pile is:")
+
+    let mut top_card = discard_pile.last().clone().to_vec();
+    display_cards(&top_card, 1);
 
     let draw_instructions_str = "Enter the corresponding number to the pile you want to draw from\n1 - Draw from Deck\n2 - Draw from Top of Discard Pile";
     let draw_decision = prompt_for_number(draw_instructions_str, 1, 2);
 
     if draw_decision == 1 {
-        
+        let card = draw_card(deck)
+        hand.push(card);
     }
     else {
-
+        let card = draw_card(discard_pile);
+        hand.push(card);
     }
+
+    println!("Your Hand Current is:");
+
+    display_cards(hand, hand.len());
 
 
     return false;
