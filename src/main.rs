@@ -177,8 +177,10 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     }   
     else {
         println!("Laying Down Feature is still under development");
+        
         let secondary_discard_str = "Enter the number representing the position of the card that you wish to discard.";
         let secondary_discard_index = prompt_for_number(secondary_discard_str, 1, hand.len().try_into().unwrap());
+
         let discarded_card = hand.remove((secondary_discard_index - 1).into());
         discard_card(discard_pile, discarded_card);
         println!("Discarded a card");
