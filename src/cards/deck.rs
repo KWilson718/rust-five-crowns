@@ -111,6 +111,37 @@ pub fn display_cards(deck: &Vec<Card>, cards_per_row: usize) {
     }
 }
 
+pub fn display_hand(deck: &Vec<Card>, cards_per_row: usize) {
+    // Prepare rows for output
+    let mut rows = vec!["".to_string(); 8]; // Each card has 6 rows of output
+
+    for (i, card) in deck.iter().enumerate() {
+        // Format card components
+        let alpha_display = format!("{:>2}", card.alpha_value);
+        let suit_display = format!("{:^8}", format!("{:?}", card.suit));
+        let index_display = format!("{:^10}", i + 1);
+
+        // Add this card's rows to the output rows
+        rows[0].push_str("---------- ");
+        rows[1].push_str(&format!("|{}      | ", alpha_display));
+        rows[2].push_str("|        | ");
+        rows[3].push_str(&format!("|{}| ", suit_display));
+        rows[4].push_str("|        | ");
+        rows[5].push_str(&format!("|      {}| ", alpha_display));
+        rows[6].push_str("---------- ");
+        rows[7].push_str(&format!("{:<10} ", index_display));
+
+        // Print rows if we've reached the limit per row or the end of the deck
+        if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
+            for row in &rows {
+                println!("{}", row.trim_end());
+            }
+            println!(); // Add a blank line between rows of cards
+            rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
+        }
+    }
+}
+
 pub fn draw_card(deck: &mut Vec<Card>) -> Card {
     // Check if the deck is empty
     if deck.is_empty() {

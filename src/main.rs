@@ -2,7 +2,7 @@ use std::io;
 
 mod cards;
 // use cards::types::{Suit, Value, Card}; Commented out since the types items aren't currently being used
-use cards::deck::{create_deck, shuffle_deck, display_cards, draw_hand, draw_card, discard_card};
+use cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card};
 
 fn main() {
@@ -103,13 +103,16 @@ fn debug_test_round() {
     let mut player_hand = draw_hand(&mut deck, 3);
     let mut computer_hand = draw_hand(&mut deck, 3);
 
+    let discard_pile_start = draw_card(&mut deck);
+    discard_pile.push(discard_pile_start);
+
     println!("Drew Following Hand\n");
 
     display_cards(&player_hand, 3);
 
-    println!("Computer has Following Hand\n");
+    // println!("Computer has Following Hand\n");
 
-    display_cards(&computer_hand, 3);
+    // display_cards(&computer_hand, 3);
 
     let mut pre_lay_down: bool = true;
     let mut test_turn_limit = 10;
@@ -138,16 +141,21 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Return True if still going, False if Laid Down
 
     println!("Player Turn Started:");
-    println!("The Top of the Discard Pile is:")
+    println!("The Top of the Discard Pile is:");
 
-    let mut top_card = discard_pile.last().clone().to_vec();
-    display_cards(&top_card, 1);
+    // Extract the top card from discard_pile and clone it
+    if let Some(top_card_raw) = discard_pile.last_mut() {
+        let top_card: Vec<Card> = vec![top_card_raw.clone()];
+        display_cards(&top_card, 1);
+    } else {
+        println!("Discard pile is empty!");
+    }
 
     let draw_instructions_str = "Enter the corresponding number to the pile you want to draw from\n1 - Draw from Deck\n2 - Draw from Top of Discard Pile";
     let draw_decision = prompt_for_number(draw_instructions_str, 1, 2);
 
     if draw_decision == 1 {
-        let card = draw_card(deck)
+        let card = draw_card(deck);
         hand.push(card);
     }
     else {
@@ -157,8 +165,24 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
 
     println!("Your Hand Current is:");
 
-    display_cards(hand, hand.len());
+    display_hand(hand, 5);
 
+    let discard_instructions_str = "Enter 0 if you are ready to try to lay down your hand, or...\nEnter the number representing the position of the card that you wish to discard.";
+    let discard_index = prompt_for_number(discard_instructions_str, 0, hand.len().try_into().unwrap());
+
+    if discard_index > 0 {
+        let discarded_card = hand.remove((discard_index - 1).into());
+        discard_card(discard_pile, discarded_card);
+        println!("Discarded a card");
+    }   
+    else {
+        println!("Laying Down Feature is still under development");
+        let secondary_discard_str = "Enter the number representing the position of the card that you wish to discard.";
+        let secondary_discard_index = prompt_for_number(secondary_discard_str, 1, hand.len().try_into().unwrap());
+        let discarded_card = hand.remove((secondary_discard_index - 1).into());
+        discard_card(discard_pile, discarded_card);
+        println!("Discarded a card");
+    }
 
     return false;
 }
@@ -171,8 +195,8 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
     hand.push(card);
 
     // Display hand after drawing
-    println!("Hand after drawing a card:");
-    display_cards(&hand, hand.len());
+    // println!("Hand after drawing a card:");
+    // display_cards(&hand, hand.len());
 
     // Simulate discarding a card
     if !hand.is_empty() {
@@ -180,17 +204,17 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
         let discarded_card = hand.remove(discard_index);
         discard_card(discard_pile, discarded_card); // Pass the owned card
         println!("Discarded a card:");
-        display_cards(&discard_pile, discard_pile.len());
+        // display_cards(&discard_pile, discard_pile.len());
     } else {
         println!("No cards to discard.");
     }
 
     let lay_down = check_if_lay_down();
 
-    println!("Finishing Turn with Hand:");
-    display_cards(hand, hand.len());
+    // println!("Finishing Turn with Hand:");
+    // display_cards(hand, hand.len());
 
-    lay_down
+    return lay_down;
 }
 
 
