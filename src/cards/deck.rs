@@ -137,7 +137,7 @@ pub fn display_hand(deck: &Vec<Card>, cards_per_row: usize) {
                 println!("{}", row.trim_end());
             }
             println!(); // Add a blank line between rows of cards
-            rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
+            rows = vec!["".to_string(); 8]; // Reset rows for the next set of cards
         }
     }
 }
@@ -168,4 +168,11 @@ pub fn draw_hand(deck: &mut Vec<Card>, hand_size: u8) -> Vec<Card> {
 
 pub fn discard_card(discard_pile: &mut Vec<Card>, card: Card) {
     discard_pile.push(card);
+}
+
+pub fn sort_cards(cards: &mut Vec<Card>){
+    cards.sort_by(|a, b|{
+        format!("{:?}", a.suit).cmp(&format!("{:?}", b.suit)) // Compare `suit` first
+            .then_with(|| a.numeric_value.cmp(&b.numeric_value)) // Then compare `numeric_value`
+    });
 }

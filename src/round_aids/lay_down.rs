@@ -1,4 +1,4 @@
-use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
+use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card, sort_cards};
 use crate::cards::types::{Card, Value};
 
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
@@ -15,10 +15,10 @@ pub fn check_if_lay_down(hand: &mut Vec<Card>) -> bool {
     extract_wilds(hand, &mut wild_cards, &mut std_cards, round_value);
 
     println!("Wilds Found:");
-    display_cards(&wild_cards, 3);
-    println!("Rest of Cards");
-    display_cards(&std_cards, 3);
-
+    display_cards(&wild_cards, 7);
+    println!("Rest of Cards, sorted");
+    sort_cards(&mut std_cards);
+    display_cards(&std_cards, 7);
     return false;
 }
 
@@ -37,3 +37,4 @@ fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &m
         }
     }
 }
+

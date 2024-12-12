@@ -38,15 +38,15 @@ pub fn debug_test_round() {
 
     println!("Deck is Shuffled & Ready, Dealing Cards\n");
 
-    let mut player_hand = draw_hand(&mut deck, 3);
-    let mut computer_hand = draw_hand(&mut deck, 3);
+    let mut player_hand = draw_hand(&mut deck, 7);
+    let mut computer_hand = draw_hand(&mut deck, 7);
 
     let discard_pile_start = draw_card(&mut deck);
     discard_pile.push(discard_pile_start);
 
     println!("Drew Following Hand\n");
 
-    display_cards(&player_hand, 3);
+    display_cards(&player_hand, 7);
 
     // println!("Computer has Following Hand\n");
 
@@ -103,7 +103,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
 
     println!("Your Hand Current is:");
 
-    display_hand(hand, 5);
+    display_hand(hand, 7);
 
     let discard_instructions_str = "Enter 0 if you are ready to try to lay down your hand, or...\nEnter the number representing the position of the card that you wish to discard.";
     let discard_index = prompt_for_number(discard_instructions_str, 0, hand.len().try_into().unwrap());
