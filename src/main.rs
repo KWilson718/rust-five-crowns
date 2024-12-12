@@ -5,6 +5,7 @@ mod cards;
 use cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card};
 
+// Handles core prompting of player & calling the right function based on the menu's selection in a loop until the session is over
 fn main() {
 
     // The While loop in this instance is used to simulate a potentially multi-game long session of usage, or the ability to read the rules & return to play
@@ -20,7 +21,7 @@ fn main() {
 
         // Switch case to handle menu entries
         match selection_val{
-            0=>still_playing = false,
+            0=>still_playing = false, // Triggers the exit option of the while loop to get to the end
             1=>println!("\nPlay Option Selected, Launching Game\n"),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
             3=>test_round(),
@@ -177,7 +178,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     }   
     else {
         println!("Laying Down Feature is still under development");
-        
+
         let secondary_discard_str = "Enter the number representing the position of the card that you wish to discard.";
         let secondary_discard_index = prompt_for_number(secondary_discard_str, 1, hand.len().try_into().unwrap());
 
@@ -219,10 +220,10 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
     return lay_down;
 }
 
-
-
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
 fn check_if_lay_down() -> bool {
+    
+
     return false;
 }
 
