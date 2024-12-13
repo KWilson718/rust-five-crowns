@@ -106,4 +106,16 @@ fn test_scores() {
     test_score = calculate_score(&test_hand);
 
     println!("Resulting Score is {}", test_score);
+
+    test_hand.truncate(0);
+
+    test_hand.push(create_card(Suit::Spade, Value::Five, 5));
+    test_hand.push(create_card(Suit::Wild, Value::Wild, 50));
+    test_hand.push(create_card(Suit::Heart, Value::Six, 6));
+
+    test_hand = shuffle_deck(test_hand);
+
+    test_score = calculate_score(&test_hand);
+
+    println!("Resulting Score is {}", test_score);
 }

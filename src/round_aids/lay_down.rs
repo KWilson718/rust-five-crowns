@@ -68,7 +68,6 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
 
     let score: u32 = hand.iter().filter(|card| !grouped_cards.contains(card)).map(|card| {
         match card.value {
-            Value::Wild => 0,
             _ => card.numeric_value as u32,
         }
     }).sum();
