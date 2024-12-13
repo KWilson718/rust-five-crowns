@@ -47,5 +47,5 @@ fn test_scores() {
 
     let test_score = calculate_score(&test_hand);
 
-    println!("Resulting Score is: {}", test_score);
+    println!("Resulting Score is: {}\n", test_score);
 }
