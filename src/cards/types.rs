@@ -1,4 +1,4 @@
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Suit {
     Wild,
     Star,
@@ -8,7 +8,7 @@ pub enum Suit {
     Heart,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Value {
     Three,
     Four,
@@ -57,5 +57,14 @@ impl Clone for Card {
             numeric_value: self.numeric_value,
             alpha_value: self.alpha_value.clone(), // Clone the String
         }
+    }
+}
+
+impl PartialEq for Card {
+    fn eq(&self, other: &Self) -> bool {
+        self.suit == other.suit &&
+        self.value == other.value &&
+        self.numeric_value == other.numeric_value &&
+        self.alpha_value == other.alpha_value
     }
 }

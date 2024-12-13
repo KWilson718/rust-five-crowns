@@ -3,7 +3,7 @@ use rand::seq::SliceRandom;
 
 use super::types::{Suit, Value, Card};
 
-fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
+pub fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
     let alpha_value: String;
 
     alpha_value = match numeric_value {

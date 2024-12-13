@@ -38,8 +38,8 @@ pub fn debug_test_round() {
 
     println!("Deck is Shuffled & Ready, Dealing Cards\n");
 
-    let mut player_hand = draw_hand(&mut deck, 7);
-    let mut computer_hand = draw_hand(&mut deck, 7);
+    let mut player_hand = draw_hand(&mut deck, 4);
+    let mut computer_hand = draw_hand(&mut deck, 4);
 
     let discard_pile_start = draw_card(&mut deck);
     discard_pile.push(discard_pile_start);
