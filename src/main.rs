@@ -45,9 +45,6 @@ fn test_scores() {
     test_hand.push(create_card(Suit::Star, Value::Four, 4));
     test_hand.push(create_card(Suit::Star, Value::Five, 5));
 
-    println!("Testing the following hand:");
-    display_cards(&test_hand, 3);
-
     let test_score = calculate_score(&test_hand);
 
     println!("Resulting Score is: {}", test_score);
