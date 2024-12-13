@@ -45,34 +45,33 @@ fn test_scores() {
     test_hand.push(create_card(Suit::Star, Value::Four, 4));
     test_hand.push(create_card(Suit::Star, Value::Five, 5));
 
-    let test_score = calculate_score(&test_hand);
+    let mut test_score = calculate_score(&test_hand);
 
     println!("Resulting Score is: {}\n", test_score);
 
-    let mut test_hand_2: Vec<Card> = Vec::new();
+    test_hand.truncate(0);
 
-    test_hand_2.push(create_card(Suit::Star, Value::Five, 5));
-    test_hand_2.push(create_card(Suit::Diamond, Value::Five, 5));
-    test_hand_2.push(create_card(Suit::Heart, Value::Five, 5));
-    test_hand_2.push(create_card(Suit::Club, Value::Five, 5));
+    test_hand.push(create_card(Suit::Star, Value::Five, 5));
+    test_hand.push(create_card(Suit::Diamond, Value::Five, 5));
+    test_hand.push(create_card(Suit::Heart, Value::Five, 5));
+    test_hand.push(create_card(Suit::Club, Value::Five, 5));
 
-    let test_score_2 = calculate_score(&test_hand_2);
+    test_score = calculate_score(&test_hand);
 
-    println!("Resulting Score is: {}", test_score_2);
-
-    let mut test_hand_3: Vec<Card> = Vec::new();
-
-    test_hand_3.push(create_card(Suit::Star, Value::Five, 5));
-    test_hand_3.push(create_card(Suit::Diamond, Value::Five, 5));
-    test_hand_3.push(create_card(Suit::Heart, Value::Five, 5));
-    test_hand_3.push(create_card(Suit::Club, Value::Five, 5));
+    println!("Resulting Score is: {}", test_score);
     
-    test_hand_3.push(create_card(Suit::Spade, Value::Five, 5));
-    test_hand_3.push(create_card(Suit::Spade, Value::Six, 6));
-    test_hand_3.push(create_card(Suit::Spade, Value::Seven, 7));
-    test_hand_3.push(create_card(Suit::Spade, Value::Eight, 8));
+    test_hand.push(create_card(Suit::Spade, Value::Five, 5));
+    test_hand.push(create_card(Suit::Spade, Value::Six, 6));
+    test_hand.push(create_card(Suit::Spade, Value::Seven, 7));
+    test_hand.push(create_card(Suit::Spade, Value::Eight, 8));
 
-    let test_score_3 = calculate_score(&test_hand_3);
+    test_score = calculate_score(&test_hand);
 
-    println!("Resulting Score is: {}", test_score_3);
+    println!("Resulting Score is: {}", test_score);
+
+    test_hand = shuffle_deck(test_hand);
+
+    test_score = calculate_score(&test_hand);
+
+    println!("Resulting Score is: {}", test_score);
 }
