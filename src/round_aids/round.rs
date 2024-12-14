@@ -4,6 +4,60 @@ use crate::round_aids::lay_down::{check_if_lay_down, calculate_score};
 use crate::round_aids::lay_down::{optimized_computer_discard};
 use crate::util::utils::{prompt_for_number};
 
+pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize) {
+    println!("Round Started, Current Hand & Round Specific Wild Card Size: {}", hand_size);
+
+    println!("Current Scores:\nPlayer - {}\nComputer - {}", player_score, computer_score);
+
+    let mut discard_pile: Vec<Card> = Vec::new();
+
+    let mut deck = create_deck();
+    deck = shuffle_deck(deck);
+
+    println!("Deck is Shuffled & Ready, Dealing Cards\n");
+
+    let mut player_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
+    let mut computer_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
+
+    let discard_pile_start = draw_card(&mut deck);
+    discard_pile.push(discard_pile_start);
+
+    println!("Drew Following Hand\n");
+
+    display_cards(&player_hand, 5);
+
+    let mut pre_lay_down: bool = true;
+
+    let mut player_down_first = false;
+
+    while pre_lay_down {
+        if player_turn(&mut player_hand, &mut deck, &mut discard_pile) {
+            pre_lay_down = false;
+            player_down_first = true;
+            println!("Player Was Able to Lay Down Cards");
+            break;
+        }
+
+        if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
+            pre_lay_down = false;
+            println!("Computer Was Able to lay Down Cards");
+            break;
+        }
+    }
+
+    if player_down_first {
+        if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
+            *computer_score = *computer_score + calculate_score(&computer_hand);
+        }
+    } else {
+        if !player_turn(&mut player_hand, &mut deck, &mut discard_pile) {
+            *player_score = *player_score + calculate_score(&player_hand);
+        }
+    }
+
+    println!("The Scores Are:\nPlayer - {}\nComputer - {}", player_score, computer_score);
+}
+
 pub fn test_round() {
     println!("Test Round Selected, Creating Basic Deck & Shuffling\n");
 

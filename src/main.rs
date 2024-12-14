@@ -1,12 +1,14 @@
 mod cards;
 mod round_aids;
 mod util;
+mod game_aids;
 
 use cards::deck::{create_deck, create_card, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card, Suit, Value};
 use round_aids::round::{test_round, debug_test_round};
 use round_aids::lay_down::{calculate_score};
 use util::utils::{prompt_for_number};
+use game_aids::game::{game};
 
 // Handles core prompting of player & calling the right function based on the menu's selection in a loop until the session is over
 fn main() {
@@ -25,7 +27,7 @@ fn main() {
         // Switch case to handle menu entries
         match selection_val{
             0=>still_playing = false, // Triggers the exit option of the while loop to get to the end
-            1=>println!("\nPlay Option Selected, Launching Game\n"),
+            1=>game(),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
             3=>test_round(),
             4=>debug_test_round(),
@@ -84,6 +86,19 @@ fn test_scores() {
     test_hand.push(create_card(Suit::Spade, Value::Five, 5));
     test_hand.push(create_card(Suit::Wild, Value::Wild, 50));
     test_hand.push(create_card(Suit::Heart, Value::Six, 6));
+
+    test_hand = shuffle_deck(test_hand);
+
+    test_score = calculate_score(&test_hand);
+
+    println!("-------------------------------------Resulting Score is {}\n", test_score);
+
+    test_hand.truncate(0);
+
+    test_hand.push(create_card(Suit::Star, Value::Nine, 9));
+    test_hand.push(create_card(Suit::Club, Value::Nine, 9));
+    test_hand.push(create_card(Suit::Star, Value::Four, 4));
+    test_hand.push(create_card(Suit::Wild, Value::Wild, 50));
 
     test_hand = shuffle_deck(test_hand);
 
