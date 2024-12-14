@@ -48,26 +48,22 @@ pub fn debug_test_round() {
 
     display_cards(&player_hand, 7);
 
-    // println!("Computer has Following Hand\n");
-
-    // display_cards(&computer_hand, 3);
-
     let mut pre_lay_down: bool = true;
-    let mut test_turn_limit = 10;
+
+    let mut player_down_first = false;
 
     while pre_lay_down {
         if player_turn(&mut player_hand, &mut deck, &mut discard_pile) {
             pre_lay_down = false;
+            player_down_first = true;
+            println!("Player Was Able to Lay Down Cards");
+            break;
         }
 
         if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
             pre_lay_down = false;
-        }
-
-        test_turn_limit -= 1;
-
-        if test_turn_limit == 0 {
-            pre_lay_down = false;
+            println!("Computer Was Able to lay Down Cards")
+            break;
         }
     }
 }   
@@ -137,10 +133,6 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
     println!("Computer Turn Started, Drawing Card");
     let card = draw_card(deck);
     hand.push(card);
-
-    // Display hand after drawing
-    // println!("Hand after drawing a card:");
-    // display_cards(&hand, hand.len());
 
     // Simulate discarding a card
     if !hand.is_empty() {

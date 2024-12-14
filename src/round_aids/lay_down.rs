@@ -7,8 +7,6 @@ use crate::cards::types::{Card, Value, Suit};
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
 pub fn check_if_lay_down(hand: &mut Vec<Card>) -> bool {
 
-    println!("Still Working on getting round based Wilds to work, currently only Jokers implemented");
-
     let clear_for_lay_down = calculate_score(&hand);
 
     println!("The Calculate Score Function Returned: {}", clear_for_lay_down);
@@ -24,8 +22,27 @@ pub fn check_if_lay_down(hand: &mut Vec<Card>) -> bool {
 
 // Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
 pub fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
-    return 0;
+    let mut min_score = u32::MAX; // Initialize to the maximum possible score
+    let mut discard_index = 0; // Initialize the index to discard
+
+    for i in 0..hand.len() {
+        // Create a temporary hand without the current card
+        let mut temp_hand = hand.clone();
+        temp_hand.remove(i);
+
+        // Calculate the score of the temporary hand
+        let temp_score = calculate_score(&temp_hand);
+
+        // Update the minimum score and discard index if this score is lower
+        if temp_score < min_score {
+            min_score = temp_score;
+            discard_index = i;
+        }
+    }
+
+    discard_index
 }
+
 
 // Extract wilds from the hand
 fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &mut Vec<Card>, round_value: u8) {
