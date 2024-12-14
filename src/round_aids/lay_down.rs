@@ -89,11 +89,18 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
 
     // Create a set of grouped cards to easily check exclusion
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
-    let used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
+    let mut used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
 
     println!("Grouped card set: {:?}", grouped_card_set);
     println!("Grouped Used Wilds: {:?}", used_wild_card_set);
 
+
+    // Checks to see if there are any unused final wilds that can be fit into ANY existing group, but were missed by the previous functions
+    if (grouped_card_set.len() > 0) && (used_wild_card_set.len() < wild_cards.len()) {
+        used_wild_card_set = wild_cards.iter().collect(); // Represents the rest of the wilds getting tossed into random groups to finish out
+    }
+
+    
     // Compute the final score, ensuring grouped cards are excluded
     let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| {
         println!("Card being scored: {:?}", card);
