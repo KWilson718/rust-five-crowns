@@ -36,13 +36,16 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
 
         if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
             pre_lay_down = false;
-            println!("Computer Was Able to lay Down Cards");
+            println!("Computer Was Able to lay Down Following Cards");
+            display_cards(&computer_hand, 6);
             break;
         }
     }
 
     if player_down_first {
         if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
+            println!("Final Hand of Computer");
+            display_cards(&computer_hand, 6);
             *computer_score = *computer_score + calculate_score(&computer_hand);
         }
     } else {
@@ -59,7 +62,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Return True if still going, False if Laid Down
 
     if final_turn {
-        println!("Computer Has Laid Down, Final Turn of Round:")
+        println!("\n\nComputer Has Laid Down, Final Turn of Round:")
     } else {
         println!("Player Turn Started:");
     }
@@ -144,7 +147,7 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
         let discard_index = optimized_computer_discard(hand);
         let discarded_card = hand.remove(discard_index);
         discard_card(discard_pile, discarded_card); // Pass the owned card
-        println!("Discarded a card:");
+        println!("Discarded a card:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         // display_cards(&discard_pile, discard_pile.len());
     } else {
         println!("No cards to discard.");
