@@ -62,7 +62,7 @@ pub fn debug_test_round() {
 
         if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
             pre_lay_down = false;
-            println!("Computer Was Able to lay Down Cards")
+            println!("Computer Was Able to lay Down Cards");
             break;
         }
     }

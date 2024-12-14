@@ -92,14 +92,14 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         }
     }
 
-    println!("Number of Wild Cards Detected: {}", wild_cards.len());
+    // println!("Number of Wild Cards Detected: {}", wild_cards.len());
 
     let mut grouped_cards: Vec<&Card> = vec![];
 
     form_books(&mut value_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
     form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
 
-    println!("Grouped Cards After Forming Books and Runs:");
+    // println!("Grouped Cards After Forming Books and Runs:");
     for card in &grouped_cards {
         card.describe();
     }
@@ -108,8 +108,8 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
     let mut used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
 
-    println!("Grouped card set: {:?}", grouped_card_set);
-    println!("Grouped Used Wilds: {:?}", used_wild_card_set);
+    // println!("Grouped card set: {:?}", grouped_card_set);
+    // println!("Grouped Used Wilds: {:?}", used_wild_card_set);
 
 
     // Checks to see if there are any unused final wilds that can be fit into ANY existing group, but were missed by the previous functions
@@ -128,7 +128,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         }
     }).sum();
 
-    println!("Final calculated score: {}", score);
+    // println!("Final calculated score: {}", score);
     score
 }
 
@@ -141,7 +141,7 @@ fn form_books<'a>(
     round_wild_card: Value
 ) {
     for (_, group) in value_groups.iter_mut() {
-        println!("Forming books with group: {:?}", group);
+        // println!("Forming books with group: {:?}", group);
         if group.len() + wild_cards.len() >= 3 {
             grouped_cards.extend(group.iter());
             if group.len() < 3 {
@@ -150,12 +150,12 @@ fn form_books<'a>(
                     if let Some(wild_card) = wild_cards.pop() {
                         grouped_cards.push(wild_card);
                         used_wild_cards.push(wild_card);
-                        println!("Adding wild card to book: {:?}", wild_card);
+                        // println!("Adding wild card to book: {:?}", wild_card);
                     }
                 }
             }
         }
-        println!("Grouped cards after forming books: {:?}", grouped_cards);
+        // println!("Grouped cards after forming books: {:?}", grouped_cards);
     }
 }
 
@@ -167,12 +167,12 @@ fn form_runs<'a>(
     used_wild_cards: &mut Vec<&'a Card>, 
     round_wild_card: Value
 ) {
-    println!("The number of wilds passed into the form_runs function is: {}", wild_cards.len());
+    // println!("The number of wilds passed into the form_runs function is: {}", wild_cards.len());
 
     for (_, group) in suit_groups.iter_mut() {
         group.sort_by_key(|card| card.numeric_value);
 
-        display_cards_debug(group, 10);
+        // display_cards_debug(group, 10);
 
         let mut current_run: Vec<&Card> = Vec::new();
         let mut remaining_wilds = wild_cards.clone();
@@ -181,42 +181,42 @@ fn form_runs<'a>(
             let current_value = card.numeric_value;
             let prev_value = if i == 0 { current_value } else { current_run.last().unwrap().numeric_value + 1 };
 
-            println!("Processing card: {:?}", card);
-            println!("Current value: {}, Previous value: {}", current_value, prev_value);
+            // println!("Processing card: {:?}", card);
+            // println!("Current value: {}, Previous value: {}", current_value, prev_value);
 
             if current_value == prev_value {
                 current_run.push(*card);
             } else if current_value == prev_value + 1 && remaining_wilds.len() >= 1{
-                println!("Found Current Value + 1 as card");
+                // println!("Found Current Value + 1 as card");
                 if let Some(wild_card) = remaining_wilds.pop() {
                     current_run.push(wild_card);
                     used_wild_cards.push(wild_card);
-                    println!("Adding wild card to fill gap: {:?}", wild_card);
+                    // println!("Adding wild card to fill gap: {:?}", wild_card);
                 }
                 current_run.push(*card);
             } else {
                 // Handle the gap with wild cards
                 let gap_size = (current_value - prev_value - 1) as usize;
-                println!("Found Gap in Run of Size: {}", gap_size);
+                // println!("Found Gap in Run of Size: {}", gap_size);
                 if remaining_wilds.len() >= gap_size {
                     for _ in 0..gap_size {
                         if let Some(wild_card) = remaining_wilds.pop() {
                             current_run.push(wild_card);
                             used_wild_cards.push(wild_card);
-                            println!("Adding wild card to fill gap: {:?}", wild_card);
+                            // println!("Adding wild card to fill gap: {:?}", wild_card);
                         }
                     }
                     current_run.push(*card);
                 } else {
                     // Not enough wilds to fill the gap, finalize the current run if it's valid
                     if current_run.len() + remaining_wilds.len() >= 3 {
-                        println!("Finalizing run with current run: {:?}", current_run);
+                        // println!("Finalizing run with current run: {:?}", current_run);
                         grouped_cards.extend(&current_run);
                         for card_in_run in &current_run {
                             if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
                                 used_wild_cards.push(*card_in_run);
                             }
-                            println!("Finalizing run - card in run: {:?}", card_in_run);
+                            // println!("Finalizing run - card in run: {:?}", card_in_run);
                         }
                     }
                     current_run.clear();
@@ -227,18 +227,18 @@ fn form_runs<'a>(
 
             // Finalize run at the end if applicable
             if i == group.len() - 1 && current_run.len() + remaining_wilds.len() >= 3 {
-                println!("Finalizing run at the end with current run: {:?}", current_run);
+                // println!("Finalizing run at the end with current run: {:?}", current_run);
                 grouped_cards.extend(&current_run);
                 for card_in_run in &current_run {
                     if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
                         used_wild_cards.push(*card_in_run);
                     }
-                    println!("Finalizing run at end - card in run: {:?}", card_in_run);
+                    // println!("Finalizing run at end - card in run: {:?}", card_in_run);
                 }
             }
         }
 
-        println!("Grouped cards after forming runs: {:?}", grouped_cards);
+        // println!("Grouped cards after forming runs: {:?}", grouped_cards);
     }
 }
 
