@@ -24,6 +24,7 @@ pub enum Value {
     Wild,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Card {
     pub suit: Suit,
     pub value: Value,
@@ -49,22 +50,22 @@ impl Card {
     }
 }
 
-impl Clone for Card {
-    fn clone(&self) -> Self {
-        Card {
-            suit: self.suit,
-            value: self.value,
-            numeric_value: self.numeric_value,
-            alpha_value: self.alpha_value.clone(), // Clone the String
-        }
-    }
-}
+// impl Clone for Card {
+//     fn clone(&self) -> Self {
+//         Card {
+//             suit: self.suit,
+//             value: self.value,
+//             numeric_value: self.numeric_value,
+//             alpha_value: self.alpha_value.clone(), // Clone the String
+//         }
+//     }
+// }
 
-impl PartialEq for Card {
-    fn eq(&self, other: &Self) -> bool {
-        self.suit == other.suit &&
-        self.value == other.value &&
-        self.numeric_value == other.numeric_value &&
-        self.alpha_value == other.alpha_value
-    }
-}
+// impl PartialEq for Card {
+//     fn eq(&self, other: &Self) -> bool {
+//         self.suit == other.suit &&
+//         self.value == other.value &&
+//         self.numeric_value == other.numeric_value &&
+//         self.alpha_value == other.alpha_value
+//     }
+// }
