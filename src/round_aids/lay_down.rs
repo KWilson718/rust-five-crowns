@@ -5,19 +5,25 @@ use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand,
 use crate::cards::types::{Card, Value, Suit};
 
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
-pub fn check_if_lay_down(hand: &mut Vec<Card>) -> bool {
+pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
 
     let clear_for_lay_down = calculate_score(&hand);
 
-    println!("The Calculate Score Function Returned: {}", clear_for_lay_down);
+    if is_player {
+        println!("The Calculate Score Function Returned: {}", clear_for_lay_down);
 
-    if clear_for_lay_down == 0 {
-        println!("Successfully Laid Down Cards");
-        return true;
+        if clear_for_lay_down == 0 {
+            println!("Successfully Laid Down Cards\n");
+            return true;
+        } else {
+            println!("Couldn't Lay Down Hand\n");
+            return false;
+        }
     } else {
-        println!("Couldn't Lay Down Hand");
-        return false;
+        return clear_for_lay_down == 0;
     }
+
+    
 }
 
 // Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
@@ -110,11 +116,12 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
 
     // println!("Grouped card set: {:?}", grouped_card_set);
     // println!("Grouped Used Wilds: {:?}", used_wild_card_set);
-
+    // println!{"Wild Cards List is:"};
+    // display_cards_debug(&wild_cards, 7);
 
     // Checks to see if there are any unused final wilds that can be fit into ANY existing group, but were missed by the previous functions
-    if (grouped_card_set.len() > 0) && (used_wild_card_set.len() < wild_cards.len()) {
-        used_wild_card_set = wild_cards.iter().collect(); // Represents the rest of the wilds getting tossed into random groups to finish out
+    if (grouped_card_set.len() > 0) && (wild_cards.len() > 0) {
+        used_wild_card_set.extend(wild_cards.iter()); // Represents the rest of the wilds getting tossed into random groups to finish out
     }
 
     
@@ -194,35 +201,45 @@ fn form_runs<'a>(
                     // println!("Adding wild card to fill gap: {:?}", wild_card);
                 }
                 current_run.push(*card);
-            } else {
-                // Handle the gap with wild cards
+            } else if current_value > prev_value + 1 {
                 let gap_size = (current_value - prev_value - 1) as usize;
-                // println!("Found Gap in Run of Size: {}", gap_size);
                 if remaining_wilds.len() >= gap_size {
                     for _ in 0..gap_size {
                         if let Some(wild_card) = remaining_wilds.pop() {
                             current_run.push(wild_card);
                             used_wild_cards.push(wild_card);
-                            // println!("Adding wild card to fill gap: {:?}", wild_card);
                         }
                     }
                     current_run.push(*card);
                 } else {
                     // Not enough wilds to fill the gap, finalize the current run if it's valid
                     if current_run.len() + remaining_wilds.len() >= 3 {
-                        // println!("Finalizing run with current run: {:?}", current_run);
                         grouped_cards.extend(&current_run);
                         for card_in_run in &current_run {
                             if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
                                 used_wild_cards.push(*card_in_run);
                             }
-                            // println!("Finalizing run - card in run: {:?}", card_in_run);
                         }
                     }
                     current_run.clear();
                     current_run.push(*card);
                     remaining_wilds = wild_cards.clone();
                 }
+            } else {
+                // Not enough wilds to fill the gap, finalize the current run if it's valid
+                if current_run.len() + remaining_wilds.len() >= 3 {
+                    // println!("Finalizing run with current run: {:?}", current_run);
+                    grouped_cards.extend(&current_run);
+                    for card_in_run in &current_run {
+                        if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
+                            used_wild_cards.push(*card_in_run);
+                        }
+                        // println!("Finalizing run - card in run: {:?}", card_in_run);
+                    }
+                }
+                current_run.clear();
+                current_run.push(*card);
+                remaining_wilds = wild_cards.clone();
             }
 
             // Finalize run at the end if applicable

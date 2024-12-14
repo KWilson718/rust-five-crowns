@@ -5,7 +5,6 @@ mod game_aids;
 
 use cards::deck::{create_deck, create_card, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card, Suit, Value};
-use round_aids::round::{test_round, debug_test_round};
 use round_aids::lay_down::{calculate_score};
 use util::utils::{prompt_for_number};
 use game_aids::game::{game};
@@ -19,19 +18,17 @@ fn main() {
     while still_playing {
         println!("Welcome to Command Line Five Crowns"); // Welcome message when menu hit
 
-        let menu_string = "1 - Play Five Crowns\n2 - How To Play?\n3 - Play Test Round\n4 - Play Debug Test Round\n5 - Test Scores\n0 - Exit Game";
+        let menu_string = "1 - Play Five Crowns\n2 - How To Play?\n3 - Test Scores\n0 - Exit Game";
 
         // Fetches the selection from the menu options
-        let selection_val = prompt_for_number(menu_string, 0, 5);
+        let selection_val = prompt_for_number(menu_string, 0, 3);
 
         // Switch case to handle menu entries
         match selection_val{
             0=>still_playing = false, // Triggers the exit option of the while loop to get to the end
             1=>game(),
             2=>println!("\nHow To Play Option Selected, Loading Rules\n"),
-            3=>test_round(),
-            4=>debug_test_round(),
-            5=>test_scores(),
+            3=>test_scores(),
             _=>println!("\nInvalid Menu Option, {} Is Not A Valid Selection\n", selection_val),
         }
     }

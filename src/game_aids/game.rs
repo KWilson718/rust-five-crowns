@@ -10,6 +10,8 @@ pub fn game() {
         round(&mut player_score, &mut computer_score, i);
     }
 
+    println!("\nFinal Scores:\nPlayer - {}\nComputer - {}\n", player_score, computer_score);
+
     if player_score == computer_score {
         println!("The Game Ended In A Tie!!!");
     } else if player_score > computer_score {
