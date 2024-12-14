@@ -1,6 +1,6 @@
 use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
 use crate::cards::types::{Card, Value};
-use crate::round_aids::lay_down::{check_if_lay_down};
+use crate::round_aids::lay_down::{check_if_lay_down, calculate_score};
 use crate::round_aids::lay_down::{optimized_computer_discard};
 use crate::util::utils::{prompt_for_number};
 
@@ -29,6 +29,9 @@ pub fn test_round() {
 }   
 
 pub fn debug_test_round() {
+    let mut player_score: u32 = 0;
+    let mut computer_score: u32 = 0;
+
     println!("Debug Test Round Selected, Creating Basic Deck & Shuffling\n");
 
     let mut discard_pile: Vec<Card> = Vec::new();
@@ -66,6 +69,18 @@ pub fn debug_test_round() {
             break;
         }
     }
+
+    if player_down_first {
+        if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
+            computer_score += calculate_score(&computer_hand);
+        }
+    } else {
+        if !player_turn(&mut player_hand, &mut deck, &mut discard_pile) {
+            player_score += calculate_score(&player_hand);
+        }
+    }
+
+    println!("The Final Scores Are:\nPlayer - {}\nComputer - {}", player_score, computer_score);
 }   
 
 fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Vec<Card>) -> bool{

@@ -57,10 +57,10 @@ fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &m
 
 pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     let current_wild_number = hand.len(); // Round's wild card value is based on hand size
-    println!("Current Round's Wild Number is: {}", current_wild_number);
+    // println!("Current Round's Wild Number is: {}", current_wild_number);
 
-    println!("Calculate Score Called with Following Hand: ");
-    display_cards(hand, 8);
+    // println!("Calculate Score Called with Following Hand: ");
+    // display_cards(hand, 8);
 
     let mut value_groups: HashMap<Value, Vec<&Card>> = HashMap::new();
     let mut suit_groups: HashMap<Suit, Vec<&Card>> = HashMap::new();
@@ -100,9 +100,9 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
 
     // println!("Grouped Cards After Forming Books and Runs:");
-    for card in &grouped_cards {
-        card.describe();
-    }
+    // for card in &grouped_cards {
+    //     card.describe();
+    // }
 
     // Create a set of grouped cards to easily check exclusion
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
@@ -120,7 +120,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     
     // Compute the final score, ensuring grouped cards are excluded
     let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| {
-        println!("Card being scored: {:?}", card);
+        // println!("Card being scored: {:?}", card);
         match card.value {
             Value::Wild => 50,
             v if v == round_wild_card => 20,
