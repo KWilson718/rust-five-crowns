@@ -44,9 +44,14 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
 
     if player_down_first {
         if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
-            println!("Final Hand of Computer");
+            let final_computer_score = calculate_score(&computer_hand);
+            println!("Final Hand of Computer, Totaling {} Pts", final_computer_score);
             display_cards(&computer_hand);
-            *computer_score = *computer_score + calculate_score(&computer_hand);
+            *computer_score = *computer_score + final_computer_score;
+        } else {
+            let final_computer_score = calculate_score(&computer_hand);
+            println!("Final Hand of Computer, Totaling {} Pts", final_computer_score);
+            display_cards(&computer_hand);
         }
     } else {
         if !player_turn(&mut player_hand, &mut deck, &mut discard_pile, true) {
@@ -147,7 +152,7 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
         let discard_index = optimized_computer_discard(hand);
         let discarded_card = hand.remove(discard_index);
         discard_card(discard_pile, discarded_card); // Pass the owned card
-        println!("Discarded a card:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        println!("Discarded a card:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         // display_cards(&discard_pile, discard_pile.len());
     } else {
         println!("No cards to discard.");
