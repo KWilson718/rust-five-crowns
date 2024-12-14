@@ -92,6 +92,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     let used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
 
     println!("Grouped card set: {:?}", grouped_card_set);
+    println!("Grouped Used Wilds: {:?}", used_wild_card_set);
 
     // Compute the final score, ensuring grouped cards are excluded
     let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| {
@@ -106,9 +107,6 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     println!("Final calculated score: {}", score);
     score
 }
-
-
-
 
 
 fn form_books<'a>(
@@ -138,9 +136,6 @@ fn form_books<'a>(
 }
 
 
-
-
-
 fn form_runs<'a>(
     suit_groups: &mut HashMap<Suit, Vec<&'a Card>>, 
     wild_cards: &mut Vec<&'a Card>, 
@@ -167,11 +162,18 @@ fn form_runs<'a>(
 
             if current_value == prev_value {
                 current_run.push(*card);
-            } else if current_value == prev_value + 1 {
+            } else if current_value == prev_value + 1 && remaining_wilds.len() >= 1{
+                println!("Found Current Value + 1 as card");
+                if let Some(wild_card) = remaining_wilds.pop() {
+                    current_run.push(wild_card);
+                    used_wild_cards.push(wild_card);
+                    println!("Adding wild card to fill gap: {:?}", wild_card);
+                }
                 current_run.push(*card);
             } else {
                 // Handle the gap with wild cards
                 let gap_size = (current_value - prev_value - 1) as usize;
+                println!("Found Gap in Run of Size: {}", gap_size);
                 if remaining_wilds.len() >= gap_size {
                     for _ in 0..gap_size {
                         if let Some(wild_card) = remaining_wilds.pop() {
@@ -215,7 +217,6 @@ fn form_runs<'a>(
         println!("Grouped cards after forming runs: {:?}", grouped_cards);
     }
 }
-
 
 
 
