@@ -87,6 +87,16 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         card.describe();
     }
 
+    // Check if any wild cards were used and add them to the grouped cards
+    if used_wilds > 0 {
+        for _ in 0..used_wilds {
+            if let Some(wild_card) = wild_cards.pop() {
+                grouped_cards.push(wild_card);
+                println!("Adding used wild card to grouped cards: {:?}", wild_card);
+            }
+        }
+    }
+
     // Create a set of grouped cards to easily check exclusion
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
 
@@ -128,6 +138,8 @@ fn form_books<'a>(value_groups: &mut HashMap<Value, Vec<&'a Card>>, wild_cards: 
         println!("Grouped cards after forming books: {:?}", grouped_cards);
     }
 }
+
+
 
 
 fn form_runs<'a>(
@@ -175,8 +187,8 @@ fn form_runs<'a>(
                     if current_run.len() + remaining_wilds.len() >= 3 {
                         println!("Finalizing run with current run: {:?}", current_run);
                         grouped_cards.extend(&current_run);
-                        for wild_card in &current_run {
-                            println!("Finalizing run - wild card in run: {:?}", wild_card);
+                        for card_in_run in &current_run {
+                            println!("Finalizing run - card in run: {:?}", card_in_run);
                         }
                     }
                     current_run.clear();
@@ -189,8 +201,8 @@ fn form_runs<'a>(
             if i == group.len() - 1 && current_run.len() + remaining_wilds.len() >= 3 {
                 println!("Finalizing run at the end with current run: {:?}", current_run);
                 grouped_cards.extend(&current_run);
-                for wild_card in &current_run {
-                    println!("Finalizing run at end - wild card in run: {:?}", wild_card);
+                for card_in_run in &current_run {
+                    println!("Finalizing run at end - card in run: {:?}", card_in_run);
                 }
             }
         }
@@ -198,6 +210,8 @@ fn form_runs<'a>(
         println!("Grouped cards after forming runs: {:?}", grouped_cards);
     }
 }
+
+
 
 
 // Used locally for debugging related items
