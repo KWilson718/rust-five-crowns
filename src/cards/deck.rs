@@ -88,10 +88,13 @@ pub fn display_cards(deck: &Vec<Card>) {
 
     if deck.len() < 7 {
         cards_per_row = 6;
-    } else if deck.len() < 13 {
+    } else if deck.len() < 15 {
         cards_per_row = deck.len() / 2;
+        if deck.len() % 2 == 1 {
+            cards_per_row += 1;
+        }
     } else {
-        cards_per_row = deck.len() / 3;
+        cards_per_row = 5;
     }
 
     // Prepare rows for output
@@ -128,10 +131,13 @@ pub fn display_hand(deck: &Vec<Card>) {
 
     if deck.len() < 7 {
         cards_per_row = 6;
-    } else if deck.len() < 13 {
+    } else if deck.len() < 15 {
         cards_per_row = deck.len() / 2;
+        if deck.len() % 2 == 1 {
+            cards_per_row += 1;
+        }
     } else {
-        cards_per_row = deck.len() / 3;
+        cards_per_row = 5;
     }
 
     // Prepare rows for output

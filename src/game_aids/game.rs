@@ -13,10 +13,10 @@ pub fn game() {
     println!("\nFinal Scores:\nPlayer - {}\nComputer - {}\n", player_score, computer_score);
 
     if player_score == computer_score {
-        println!("The Game Ended In A Tie!!!");
-    } else if player_score > computer_score {
-        println!("You Scored Higher Than The Computer, YOU WIN!!!");
+        println!("The Game Ended In A Tie!!!\n\n\n");
+    } else if player_score < computer_score {
+        println!("You Scored Higher Than The Computer, YOU WIN!!!\n\n\n");
     } else {
-        println!("The Computer Scored Higher Than You, You Lose...");
+        println!("The Computer Scored Higher Than You, You Lose...\n\n\n");
     }
 }
