@@ -82,7 +82,18 @@ pub fn shuffle_deck(mut deck: Vec<Card>) -> Vec<Card> {
     return deck;
 }
 
-pub fn display_cards(deck: &Vec<Card>, cards_per_row: usize) {
+pub fn display_cards(deck: &Vec<Card>) {
+
+    let mut cards_per_row: usize;
+
+    if deck.len() < 7 {
+        cards_per_row = 6;
+    } else if deck.len() < 13 {
+        cards_per_row = deck.len() / 2;
+    } else {
+        cards_per_row = deck.len() / 3;
+    }
+
     // Prepare rows for output
     let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
 
@@ -111,7 +122,18 @@ pub fn display_cards(deck: &Vec<Card>, cards_per_row: usize) {
     }
 }
 
-pub fn display_hand(deck: &Vec<Card>, cards_per_row: usize) {
+pub fn display_hand(deck: &Vec<Card>) {
+
+    let mut cards_per_row: usize;
+
+    if deck.len() < 7 {
+        cards_per_row = 6;
+    } else if deck.len() < 13 {
+        cards_per_row = deck.len() / 2;
+    } else {
+        cards_per_row = deck.len() / 3;
+    }
+
     // Prepare rows for output
     let mut rows = vec!["".to_string(); 8]; // Each card has 6 rows of output
 

@@ -37,7 +37,7 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
         if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
             pre_lay_down = false;
             println!("Computer Was Able to lay Down Following Cards");
-            display_cards(&computer_hand, 6);
+            display_cards(&computer_hand);
             break;
         }
     }
@@ -45,7 +45,7 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
     if player_down_first {
         if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
             println!("Final Hand of Computer");
-            display_cards(&computer_hand, 6);
+            display_cards(&computer_hand);
             *computer_score = *computer_score + calculate_score(&computer_hand);
         }
     } else {
@@ -71,13 +71,13 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Extract the top card from discard_pile and clone it
     if let Some(top_card_raw) = discard_pile.last_mut() {
         let top_card: Vec<Card> = vec![top_card_raw.clone()];
-        display_cards(&top_card, 1);
+        display_cards(&top_card);
     } else {
         println!("Discard pile is empty!");
     }
 
     println!("Your Current Hand Is:");
-    display_cards(hand, 7);
+    display_cards(hand);
 
     let draw_instructions_str = "Enter the corresponding number to the pile you want to draw from\n1 - Draw from Deck\n2 - Draw from Top of Discard Pile";
     let draw_decision = prompt_for_number(draw_instructions_str, 1, 2);
@@ -93,7 +93,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
 
     println!("Your Hand Current is:");
 
-    display_hand(hand, 7);
+    display_hand(hand);
 
     if !final_turn{
 
