@@ -1,7 +1,7 @@
 use crate::round_aids::round::{round};
 
 pub fn game() {
-    println!("Game Started:");
+    println!("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGame Started:");
 
     let mut player_score: u32 = 0;
     let mut computer_score: u32 = 0;
