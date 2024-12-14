@@ -48,6 +48,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     let mut value_groups: HashMap<Value, Vec<&Card>> = HashMap::new();
     let mut suit_groups: HashMap<Suit, Vec<&Card>> = HashMap::new();
     let mut wild_cards: Vec<&Card> = Vec::new(); // Collection to hold wild cards
+    let mut used_wild_cards: Vec<&Card> = Vec::new(); // Collection to hold used wild cards
 
     // Determine the current round's wild card value
     let round_wild_card = match current_wild_number {
@@ -77,33 +78,23 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     println!("Number of Wild Cards Detected: {}", wild_cards.len());
 
     let mut grouped_cards: Vec<&Card> = vec![];
-    let mut used_wilds = 0;
 
-    form_books(&mut value_groups, &mut wild_cards, &mut grouped_cards, &mut used_wilds, round_wild_card);
-    form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wilds, round_wild_card);
+    form_books(&mut value_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
+    form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
 
     println!("Grouped Cards After Forming Books and Runs:");
     for card in &grouped_cards {
         card.describe();
     }
 
-    // Check if any wild cards were used and add them to the grouped cards
-    if used_wilds > 0 {
-        for _ in 0..used_wilds {
-            if let Some(wild_card) = wild_cards.pop() {
-                grouped_cards.push(wild_card);
-                println!("Adding used wild card to grouped cards: {:?}", wild_card);
-            }
-        }
-    }
-
     // Create a set of grouped cards to easily check exclusion
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
+    let used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
 
     println!("Grouped card set: {:?}", grouped_card_set);
 
     // Compute the final score, ensuring grouped cards are excluded
-    let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card)).map(|card| {
+    let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| {
         println!("Card being scored: {:?}", card);
         match card.value {
             Value::Wild => 50,
@@ -118,19 +109,26 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
 
 
 
-fn form_books<'a>(value_groups: &mut HashMap<Value, Vec<&'a Card>>, wild_cards: &mut Vec<&'a Card>, grouped_cards: &mut Vec<&'a Card>, used_wilds: &mut i32, round_wild_card: Value) {
+
+
+fn form_books<'a>(
+    value_groups: &mut HashMap<Value, Vec<&'a Card>>, 
+    wild_cards: &mut Vec<&'a Card>, 
+    grouped_cards: &mut Vec<&'a Card>, 
+    used_wild_cards: &mut Vec<&'a Card>, 
+    round_wild_card: Value
+) {
     for (_, group) in value_groups.iter_mut() {
         println!("Forming books with group: {:?}", group);
         if group.len() + wild_cards.len() >= 3 {
             grouped_cards.extend(group.iter());
             if group.len() < 3 {
                 let wilds_needed = 3 - group.len();
-                *used_wilds += wilds_needed as i32;
-                while let Some(wild_card) = wild_cards.pop() {
-                    grouped_cards.push(wild_card);
-                    println!("Adding wild card to book: {:?}", wild_card);
-                    if grouped_cards.len() >= 3 {
-                        break;
+                for _ in 0..wilds_needed {
+                    if let Some(wild_card) = wild_cards.pop() {
+                        grouped_cards.push(wild_card);
+                        used_wild_cards.push(wild_card);
+                        println!("Adding wild card to book: {:?}", wild_card);
                     }
                 }
             }
@@ -142,11 +140,12 @@ fn form_books<'a>(value_groups: &mut HashMap<Value, Vec<&'a Card>>, wild_cards: 
 
 
 
+
 fn form_runs<'a>(
     suit_groups: &mut HashMap<Suit, Vec<&'a Card>>, 
     wild_cards: &mut Vec<&'a Card>, 
     grouped_cards: &mut Vec<&'a Card>, 
-    used_wilds: &mut i32, 
+    used_wild_cards: &mut Vec<&'a Card>, 
     round_wild_card: Value
 ) {
     println!("The number of wilds passed into the form_runs function is: {}", wild_cards.len());
@@ -177,7 +176,7 @@ fn form_runs<'a>(
                     for _ in 0..gap_size {
                         if let Some(wild_card) = remaining_wilds.pop() {
                             current_run.push(wild_card);
-                            *used_wilds += 1;  // Increment used wilds
+                            used_wild_cards.push(wild_card);
                             println!("Adding wild card to fill gap: {:?}", wild_card);
                         }
                     }
@@ -188,6 +187,9 @@ fn form_runs<'a>(
                         println!("Finalizing run with current run: {:?}", current_run);
                         grouped_cards.extend(&current_run);
                         for card_in_run in &current_run {
+                            if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
+                                used_wild_cards.push(*card_in_run);
+                            }
                             println!("Finalizing run - card in run: {:?}", card_in_run);
                         }
                     }
@@ -202,6 +204,9 @@ fn form_runs<'a>(
                 println!("Finalizing run at the end with current run: {:?}", current_run);
                 grouped_cards.extend(&current_run);
                 for card_in_run in &current_run {
+                    if card_in_run.suit == Suit::Wild || card_in_run.value == round_wild_card {
+                        used_wild_cards.push(*card_in_run);
+                    }
                     println!("Finalizing run at end - card in run: {:?}", card_in_run);
                 }
             }
