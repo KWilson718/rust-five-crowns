@@ -6,6 +6,7 @@ use crate::round_aids::round::{round};
 pub fn game() {
     println!("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nGame Started:"); // message displayed to show that a game has started & clears things above it
 
+    // Ch 6, Section 2, Unsigned Integer of medium size used to allow for the score to build up to a decently large number, knowing that there is no need for negative numbers
     // Variables that will hold the scores of the player & computer
     // u32 used in this instance since the scores can get quite large
     let mut player_score: u32 = 0;
@@ -33,6 +34,7 @@ pub fn game() {
 pub fn short_game() {
     println!("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nShort Game Started:"); // message displayed to show that a game has started & clears things above it
 
+    // Ch 6, Section 2, Unsigned Integer of medium size used to allow for the score to build up to a decently large number, knowing that there is no need for negative numbers
     // Variables that will hold the scores of the player & computer
     // u32 used in this instance since the scores can get quite large
     let mut player_score: u32 = 0;
