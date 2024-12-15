@@ -1,3 +1,4 @@
+// Ch 6, Section 4, Enumeration type used here to represent something that has further semantic meaning & benefits from hardset types
 // This enum holds the different options for suits that cards may have
 // An enum type was chosen to show an abstraction of data choices
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)] // These are rust language specific derivations that allow for good usage of the enum throughout the program
@@ -10,6 +11,7 @@ pub enum Suit {
     Heart,
 }
 
+// Ch 6, Section 4, Enumeration type used here to represent something that has further semantic meaning & benefits from hardset types
 // This enum holds the different options for what a card's value may be
 // An enum type was chosen to show an abstraction of data choices
 #[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)] // These are rust language specific derivations that allow for good usage of the enum throughout the program
@@ -28,6 +30,7 @@ pub enum Value {
     Wild,
 }
 
+// Ch 6, Section 7 - Structs used in data structure formation of type records
 // This struct represents a card, with the suit being an enum, and the value being represented across three variables due to how diferent parts of the program use it
 // A struct type was the clear choice for how to abstract the data about the card, since it allows for quick & easy reference of different variable types inside of a single collection which then plays well with being put into arrays, hashes, etc...
 #[derive(Debug, Clone, PartialEq, Eq, Hash)] // These are rust language specific derivations that allow for good usage of the struct throughout the program
