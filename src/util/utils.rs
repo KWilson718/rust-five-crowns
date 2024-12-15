@@ -11,6 +11,7 @@ pub fn prompt_for_number(prompt: &str, min: u8, max: u8) -> u8 {
     println!("Please Enter an Option Below:");
     println!("{}", prompt);
     
+    // Ch 6, Section 3, Strings
     // Declare a String to store the text input by the user
     let mut input_selection = String::new();
 
@@ -19,6 +20,7 @@ pub fn prompt_for_number(prompt: &str, min: u8, max: u8) -> u8 {
         .read_line(&mut input_selection)
         .expect("Failed to read line");
 
+    // Ch 6, Section 2, Unsigned Int
     // Trims & parses the input into a u8
     match input_selection.trim().parse::<u8>() {
         Ok(value) => {
