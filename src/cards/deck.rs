@@ -7,6 +7,7 @@ use crate::cards::types::{Suit, Value, Card};
 
 // The actual card constructor being implemented here for readability sake
 pub fn create_card(suit: Suit, value: Value, numeric_value: u8) -> Card {
+    // Ch 6, Section 3, strings used in this instance to hold an alphetabetical string
     let alpha_value: String; // creates the alpha value
 
     // Assigns the alpha value based on the numerical value given as a parameter
@@ -35,6 +36,7 @@ pub fn create_deck() -> Vec<Card>{
     // Per the rules, there are two sets of 58 cards, with one of each possible type + three jokers, but it combines to the above for the actual gameplay
     // To simulate a brand new set of decks, the sorted deck will be created by essentially two of the smaller decks being stacked on top of eachother uising nested loops
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Vector being used for a variable sized array that will be able to use the pop function to quickly draw a card off of the end. 
     // While it might perform slower than a fixed size array, this will be really useful for simmulating a rapidly changing deck with its dynamic nature. 
     let mut sorted_deck: Vec<Card> = Vec::new();
@@ -46,6 +48,7 @@ pub fn create_deck() -> Vec<Card>{
             sorted_deck.push(create_card(Suit::Wild, Value::Wild, 50));
         }
 
+        // Ch 6, Section 4, Enumeration type used here to represent something that has further semantic meaning & benefits from hardset types
         // Arrays used to store the various values that matter for a deck, which will be iterated through to generate a deck
         // The array structure is used since it's fixed size and will be very efficient to run through
         // Additionally, the tuple is used for the value and the numeric representation to further add efficiency to the data that is hard-coded to create the deck
@@ -77,6 +80,8 @@ pub fn create_deck() -> Vec<Card>{
 
 // A shuffle function for a vector of cards using the rand dependency to be able to efficiently shuffle the deck in place
 pub fn shuffle_deck(mut deck: Vec<Card>) -> Vec<Card> {
+    
+    // This one I'm not fully sure where it lines up in Chapter 6, basically it is a thread specific randomization that will be used by the rest of the shuffler to handle more random random numbers
     // Gets a random number generation value based off of the thread_rng() function from the rand dependency
     // This allows for a more random version of a random number
     let mut rng = thread_rng(); 
@@ -94,6 +99,7 @@ pub fn shuffle_deck(mut deck: Vec<Card>) -> Vec<Card> {
 // A function used to abstract the display of cards & output multiple of them in a simple ascii art style
 pub fn display_cards(deck: &Vec<Card>) {
 
+    // Ch 6, Section 2, Unsigned Integer used here, particularly a usize one since it is more compatible with increments and other forms of numeric parameters in rust functions
     let mut cards_per_row: usize; // variable representing the cards per row to display
 
     // Logic set out to handle how many cards should be in each displayed row
@@ -109,11 +115,13 @@ pub fn display_cards(deck: &Vec<Card>) {
         cards_per_row = 5;
     }
 
+    // Ch 6, Sections 6 & 3, uses vectors of strings to be able to put a variable sized set of text into what will be multiple lines of outputted data
     // Creates rows for output
     let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
 
     // Loops through each card to add it to the output
     for (i, card) in deck.iter().enumerate() {
+        // Ch 6, Section 3, uses strings of characters in order to be able to display useful info to the player
         // Format card components
         let alpha_display = format!("{:>2}", card.alpha_value);
         let suit_display = format!("{:^8}", format!("{:?}", card.suit));
@@ -141,6 +149,7 @@ pub fn display_cards(deck: &Vec<Card>) {
 // A function used to abstract the display of cards & output multiple of them in a simple ascii art style with the inclusion of position numbers at the bottom for when choosing to discard a card
 pub fn display_hand(deck: &Vec<Card>) {
 
+    // Ch 6, Section 2, Unsigned Integer used here, particularly a usize one since it is more compatible with increments and other forms of numeric parameters in rust functions
     let mut cards_per_row: usize; // variable representing the cards per row to display
 
     // Logic set out to handle how many cards should be in each displayed row
@@ -156,11 +165,13 @@ pub fn display_hand(deck: &Vec<Card>) {
         cards_per_row = 5;
     }
 
+    // Ch 6, Sections 6 & 3, uses vectors of strings to be able to put a variable sized set of text into what will be multiple lines of outputted data
     // Creates rows for output
     let mut rows = vec!["".to_string(); 8]; // Each card has 6 rows of output & one row of positioning
 
     // Loops through each card to add it to the output
     for (i, card) in deck.iter().enumerate() {
+        // Ch 6, Section 3, uses strings of characters in order to be able to display useful info to the player
         // Format card components
         let alpha_display = format!("{:>2}", card.alpha_value);
         let suit_display = format!("{:^8}", format!("{:?}", card.suit));
@@ -194,6 +205,7 @@ pub fn draw_card(deck: &mut Vec<Card>) -> Card {
         panic!("Cannot draw from an empty deck!");
     }
 
+    // Ch 6, Section 7 - Structs used in data structure formation of type records
     // Use pop to remove and return the last card from the deck
     let card = deck.pop().expect("Deck should not be empty"); // Safe because it checked for an empty deck above
     return card;
@@ -201,6 +213,7 @@ pub fn draw_card(deck: &mut Vec<Card>) -> Card {
 
 // abstraction of the draw card for usage in rounds, where it insteads draws into a vector that grows till handsize is reached
 pub fn draw_hand(deck: &mut Vec<Card>, hand_size: u8) -> Vec<Card> {
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     let mut hand: Vec<Card> = Vec::new(); // the vector that will become the hand
 
     // Draw the hand size worth of cards
