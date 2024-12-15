@@ -1,16 +1,23 @@
+// Pulls in libraries from collections to implement HashMap & HashSet functions
 use std::collections::HashMap;
 use std::collections::HashSet;
 
+// Pulls in the capability to interface with the card type
 use crate::cards::types::{Card, Value, Suit};
 
-// Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
+// This function is used to see if a player can lay down and therefore set in progress the end of the round
+// The requirement here is that the score of the player's hand needs to be zero, showing that they can turn the full hand into groups of runs or books
 pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
 
-    let clear_for_lay_down = calculate_score(&hand);
+    let clear_for_lay_down = calculate_score(&hand); // Fetches the score from the calculate score function
 
+    // In order to provide clarity to the player, further output information is added when the is_player bool indicates that this is being called by a player
+    // When it is a player, it outputs the score, and states if it can or can't lay down, triggering the lay down functionality if it can
+    // When it's just the computer, it simply returns a bool based on the condition of if the score is zero, as to prevent giving the player hidden information abt the computer's hand
     if is_player {
         println!("The Calculate Score Function Returned: {}", clear_for_lay_down);
 
+        // Handles whether or not the player can lay down, and returning the result
         if clear_for_lay_down == 0 {
             println!("Successfully Laid Down Cards\n");
             return true;
@@ -25,50 +32,42 @@ pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
     
 }
 
-// Discard optimized card (for now just discard the first card in the array to be able to build out turn structure)
+// Discard optimized card function, to provide a selection for which card the computer should discard at the end of its turn
 pub fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
-    let mut min_score = u32::MAX; // Initialize to the maximum possible score
+    let mut min_score = u32::MAX; // Initialize to the maximum possible score, set to the maximum for ease
     let mut discard_index = 0; // Initialize the index to discard
 
     for i in 0..hand.len() {
-        // Create a temporary hand without the current card
+        // Create a temporary hand without the current index i card
         let mut temp_hand = hand.clone();
         temp_hand.remove(i);
 
         // Calculate the score of the temporary hand
         let temp_score = calculate_score(&temp_hand);
 
-        // Update the minimum score and discard index if this score is lower
+        // Update the minimum score and discard index if this score is lower than the current minimum
         if temp_score < min_score {
             min_score = temp_score;
             discard_index = i;
         }
     }
 
-    discard_index
+    // return the index that should be used to discard
+    return discard_index;
 }
 
-
-// Extract wilds from the hand, use when needed
-// fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &mut Vec<Card>, round_value: u8) {
-//     for (_, card) in hand.iter().enumerate() {
-//         if (card.value == Value::Wild) || (card.numeric_value == round_value) {
-//             wild_cards.push(card.clone());
-//         } else {
-//             std_cards.push(card.clone());
-//         }
-//     }
-// }
-
+// The primary function to a trilogy of functions used to calculate the score of a hand
+// Works to group cards into books & runs, using wild cards throughout them to best optimize a hand
+// Returns a u32 representation of the score. u32 was used in this case since it needs to be a large number, and negative numbers aren't in the range of potential scores
 pub fn calculate_score(hand: &Vec<Card>) -> u32 {
-    let current_wild_number = hand.len(); // Round's wild card value is based on hand size
-    // println!("Current Round's Wild Number is: {}", current_wild_number);
+    // Round's wild card value is based on hand size and is stored in this variable
+    let current_wild_number = hand.len(); 
 
-    // println!("Calculate Score Called with Following Hand: ");
-    // display_cards(hand, 8);
-
+    // A HashMap used to store the various groups of cards that will then be tested to form a group for scoring
     let mut value_groups: HashMap<Value, Vec<&Card>> = HashMap::new();
     let mut suit_groups: HashMap<Suit, Vec<&Card>> = HashMap::new();
+
+    // Vectors that will contain the wild cards to demonstrate which ones exist, as well as which ones have been used
     let mut wild_cards: Vec<&Card> = Vec::new(); // Collection to hold wild cards
     let mut used_wild_cards: Vec<&Card> = Vec::new(); // Collection to hold used wild cards
 
@@ -88,35 +87,26 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         _ => Value::Wild, // This should not happen in a normal game
     };
 
+    // Filters out the wild cards & adds the other cards to the right group based hash map
     for card in hand {
-        if card.suit == Suit::Wild || card.value == round_wild_card {
+        if card.suit == Suit::Wild || card.value == round_wild_card { // Wild card case
             wild_cards.push(card);
-        } else {
+        } else { // Regular card case
             suit_groups.entry(card.suit).or_default().push(card);
             value_groups.entry(card.value).or_default().push(card);
         }
     }
 
-    // println!("Number of Wild Cards Detected: {}", wild_cards.len());
-
+    // Holder vector for collecting which cards have been used in the various groups
     let mut grouped_cards: Vec<&Card> = vec![];
 
+    // Calls functions to collect the book groups & run groups to show correctly existing groups to exclude from tallying points
     form_books(&mut value_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
     form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
 
-    // println!("Grouped Cards After Forming Books and Runs:");
-    // for card in &grouped_cards {
-    //     card.describe();
-    // }
-
-    // Create a set of grouped cards to easily check exclusion
+    // Creates a set of grouped cards to easily check exclusion from scoring, as well as one of used wilds for the same purpose
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
     let mut used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
-
-    // println!("Grouped card set: {:?}", grouped_card_set);
-    // println!("Grouped Used Wilds: {:?}", used_wild_card_set);
-    // println!{"Wild Cards List is:"};
-    // display_cards_debug(&wild_cards, 7);
 
     // Checks to see if there are any unused final wilds that can be fit into ANY existing group, but were missed by the previous functions
     if (grouped_card_set.len() > 0) && (wild_cards.len() > 0) {
@@ -125,20 +115,20 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
 
     
     // Compute the final score, ensuring grouped cards are excluded
-    let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| {
-        // println!("Card being scored: {:?}", card);
-        match card.value {
-            Value::Wild => 50,
-            v if v == round_wild_card => 20,
-            _ => card.numeric_value as u32,
+    let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| { // Only uses cards that aren't fit into groups at all
+        match card.value { // Finds the correct value & adds it to the score
+            Value::Wild => 50, // For the Joker Wild Cards
+            v if v == round_wild_card => 20, // For the round specific wild card value
+            _ => card.numeric_value as u32, // For any other card's value
         }
     }).sum();
 
-    // println!("Final calculated score: {}", score);
-    score
+    return score; // Returns the score
 }
 
+/////////////////////////////////////// Documentation Filter Ends Here So Far ///////////////////////////////////////////////////////
 
+// Used to identify book groups
 fn form_books<'a>(
     value_groups: &mut HashMap<Value, Vec<&'a Card>>, 
     wild_cards: &mut Vec<&'a Card>, 
@@ -257,36 +247,3 @@ fn form_runs<'a>(
         // println!("Grouped cards after forming runs: {:?}", grouped_cards);
     }
 }
-
-
-
-// Used locally for debugging related items, uncomment when need arises
-
-// pub fn display_cards_debug(deck: &Vec<&Card>, cards_per_row: usize) {
-//     // Prepare rows for output
-//     let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
-
-//     for (i, card) in deck.iter().enumerate() {
-//         // Format card components
-//         let alpha_display = format!("{:>2}", card.alpha_value);
-//         let suit_display = format!("{:^8}", format!("{:?}", card.suit));
-
-//         // Add this card's rows to the output rows
-//         rows[0].push_str("---------- ");
-//         rows[1].push_str(&format!("|{}      | ", alpha_display));
-//         rows[2].push_str("|        | ");
-//         rows[3].push_str(&format!("|{}| ", suit_display));
-//         rows[4].push_str("|        | ");
-//         rows[5].push_str(&format!("|      {}| ", alpha_display));
-//         rows[6].push_str("---------- ");
-
-//         // Print rows if we've reached the limit per row or the end of the deck
-//         if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
-//             for row in &rows {
-//                 println!("{}", row.trim_end());
-//             }
-//             println!(); // Add a blank line between rows of cards
-//             rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
-//         }
-//     }
-// }
