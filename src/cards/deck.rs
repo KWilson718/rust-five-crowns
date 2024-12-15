@@ -198,9 +198,10 @@ pub fn discard_card(discard_pile: &mut Vec<Card>, card: Card) {
     discard_pile.push(card);
 }
 
-pub fn sort_cards(cards: &mut Vec<Card>){
-    cards.sort_by(|a, b|{
-        format!("{:?}", a.suit).cmp(&format!("{:?}", b.suit)) // Compare `suit` first
-            .then_with(|| a.numeric_value.cmp(&b.numeric_value)) // Then compare `numeric_value`
-    });
-}
+// Uncomment when needed
+// pub fn sort_cards(cards: &mut Vec<Card>){
+//     cards.sort_by(|a, b|{
+//         format!("{:?}", a.suit).cmp(&format!("{:?}", b.suit)) // Compare `suit` first
+//             .then_with(|| a.numeric_value.cmp(&b.numeric_value)) // Then compare `numeric_value`
+//     });
+// }

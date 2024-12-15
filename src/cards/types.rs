@@ -42,12 +42,13 @@ impl Card {
         }
     }
 
-    pub fn describe(&self) {
-        println!("Suit: {:?}", self.suit);
-        println!("Value: {:?}", self.value);
-        println!("Numeric Value: {}", self.numeric_value);
-        println!("Alphabetical Value: {}", self.alpha_value);
-    }
+    // Uncomment when necessary 
+    // pub fn describe(&self) {
+    //     println!("Suit: {:?}", self.suit);
+    //     println!("Value: {:?}", self.value);
+    //     println!("Numeric Value: {}", self.numeric_value);
+    //     println!("Alphabetical Value: {}", self.alpha_value);
+    // }
 }
 
 // impl Clone for Card {

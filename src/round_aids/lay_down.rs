@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 use std::collections::HashSet;
 
-use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card, sort_cards};
 use crate::cards::types::{Card, Value, Suit};
 
 // Currently set to false for all time so that the circular round logic can be played without needing to handle the check if lay down function works. 
@@ -50,16 +49,16 @@ pub fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
 }
 
 
-// Extract wilds from the hand
-fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &mut Vec<Card>, round_value: u8) {
-    for (i, card) in hand.iter().enumerate() {
-        if (card.value == Value::Wild) || (card.numeric_value == round_value) {
-            wild_cards.push(card.clone());
-        } else {
-            std_cards.push(card.clone());
-        }
-    }
-}
+// Extract wilds from the hand, use when needed
+// fn extract_wilds(hand: &mut Vec<Card>, wild_cards: &mut Vec<Card>, std_cards: &mut Vec<Card>, round_value: u8) {
+//     for (_, card) in hand.iter().enumerate() {
+//         if (card.value == Value::Wild) || (card.numeric_value == round_value) {
+//             wild_cards.push(card.clone());
+//         } else {
+//             std_cards.push(card.clone());
+//         }
+//     }
+// }
 
 pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     let current_wild_number = hand.len(); // Round's wild card value is based on hand size
@@ -145,7 +144,7 @@ fn form_books<'a>(
     wild_cards: &mut Vec<&'a Card>, 
     grouped_cards: &mut Vec<&'a Card>, 
     used_wild_cards: &mut Vec<&'a Card>, 
-    round_wild_card: Value
+    _round_wild_card: Value
 ) {
     for (_, group) in value_groups.iter_mut() {
         // println!("Forming books with group: {:?}", group);
@@ -261,33 +260,33 @@ fn form_runs<'a>(
 
 
 
-// Used locally for debugging related items
+// Used locally for debugging related items, uncomment when need arises
 
-pub fn display_cards_debug(deck: &Vec<&Card>, cards_per_row: usize) {
-    // Prepare rows for output
-    let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
+// pub fn display_cards_debug(deck: &Vec<&Card>, cards_per_row: usize) {
+//     // Prepare rows for output
+//     let mut rows = vec!["".to_string(); 7]; // Each card has 6 rows of output
 
-    for (i, card) in deck.iter().enumerate() {
-        // Format card components
-        let alpha_display = format!("{:>2}", card.alpha_value);
-        let suit_display = format!("{:^8}", format!("{:?}", card.suit));
+//     for (i, card) in deck.iter().enumerate() {
+//         // Format card components
+//         let alpha_display = format!("{:>2}", card.alpha_value);
+//         let suit_display = format!("{:^8}", format!("{:?}", card.suit));
 
-        // Add this card's rows to the output rows
-        rows[0].push_str("---------- ");
-        rows[1].push_str(&format!("|{}      | ", alpha_display));
-        rows[2].push_str("|        | ");
-        rows[3].push_str(&format!("|{}| ", suit_display));
-        rows[4].push_str("|        | ");
-        rows[5].push_str(&format!("|      {}| ", alpha_display));
-        rows[6].push_str("---------- ");
+//         // Add this card's rows to the output rows
+//         rows[0].push_str("---------- ");
+//         rows[1].push_str(&format!("|{}      | ", alpha_display));
+//         rows[2].push_str("|        | ");
+//         rows[3].push_str(&format!("|{}| ", suit_display));
+//         rows[4].push_str("|        | ");
+//         rows[5].push_str(&format!("|      {}| ", alpha_display));
+//         rows[6].push_str("---------- ");
 
-        // Print rows if we've reached the limit per row or the end of the deck
-        if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
-            for row in &rows {
-                println!("{}", row.trim_end());
-            }
-            println!(); // Add a blank line between rows of cards
-            rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
-        }
-    }
-}
+//         // Print rows if we've reached the limit per row or the end of the deck
+//         if (i + 1) % cards_per_row == 0 || i + 1 == deck.len() {
+//             for row in &rows {
+//                 println!("{}", row.trim_end());
+//             }
+//             println!(); // Add a blank line between rows of cards
+//             rows = vec!["".to_string(); 7]; // Reset rows for the next set of cards
+//         }
+//     }
+// }

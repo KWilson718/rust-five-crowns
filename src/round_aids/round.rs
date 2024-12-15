@@ -1,5 +1,5 @@
 use crate::cards::deck::{create_deck, shuffle_deck, display_cards, display_hand, draw_hand, draw_card, discard_card};
-use crate::cards::types::{Card, Value};
+use crate::cards::types::{Card};
 use crate::round_aids::lay_down::{check_if_lay_down, calculate_score};
 use crate::round_aids::lay_down::{optimized_computer_discard};
 use crate::util::utils::{prompt_for_number};
@@ -22,20 +22,18 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
     let discard_pile_start = draw_card(&mut deck);
     discard_pile.push(discard_pile_start);
 
-    let mut pre_lay_down: bool = true;
+    let pre_lay_down: bool = true;
 
     let mut player_down_first = false;
 
     while pre_lay_down {
         if player_turn(&mut player_hand, &mut deck, &mut discard_pile, false) {
-            pre_lay_down = false;
             player_down_first = true;
             println!("Player Was Able to Lay Down Cards");
             break;
         }
 
         if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
-            pre_lay_down = false;
             println!("Computer Was Able to lay Down Following Cards");
             display_cards(&computer_hand);
             break;
@@ -58,6 +56,69 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
             *player_score = *player_score + calculate_score(&player_hand);
         }
     }
+}
+
+pub fn test_round() {
+
+    let mut player_score: u32 = 0;
+    let mut computer_score: u32 = 0;
+
+    let hand_size_str = "Enter the number of cards you want in your hand\nMin 3\nMax 13";
+    let hand_size: usize = prompt_for_number(hand_size_str, 3, 13).into();
+
+    println!("\nRound Started, Current Hand Size: {}", hand_size);
+
+    println!("Current Scores:\nPlayer - {}\nComputer - {}", player_score, computer_score);
+
+    let mut discard_pile: Vec<Card> = Vec::new();
+
+    let mut deck = create_deck();
+    deck = shuffle_deck(deck);
+
+    println!("Deck is Shuffled & Ready, Dealing Cards\n");
+
+    let mut player_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
+    let mut computer_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
+
+    let discard_pile_start = draw_card(&mut deck);
+    discard_pile.push(discard_pile_start);
+
+    let pre_lay_down: bool = true;
+
+    let mut player_down_first = false;
+
+    while pre_lay_down {
+        if player_turn(&mut player_hand, &mut deck, &mut discard_pile, false) {
+            player_down_first = true;
+            println!("Player Was Able to Lay Down Cards");
+            break;
+        }
+
+        if computer_turn(&mut computer_hand, &mut deck, &mut discard_pile) {
+            println!("Computer Was Able to lay Down Following Cards");
+            display_cards(&computer_hand);
+            break;
+        }
+    }
+
+    if player_down_first {
+        if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  {
+            let final_computer_score = calculate_score(&computer_hand);
+            println!("Final Hand of Computer, Totaling {} Pts", final_computer_score);
+            display_cards(&computer_hand);
+            computer_score = computer_score + final_computer_score;
+        } else {
+            let final_computer_score = calculate_score(&computer_hand);
+            println!("Final Hand of Computer, Totaling {} Pts", final_computer_score);
+            display_cards(&computer_hand);
+        }
+    } else {
+        if !player_turn(&mut player_hand, &mut deck, &mut discard_pile, true) {
+            player_score = player_score + calculate_score(&player_hand);
+        }
+    }
+
+    println!("Final Scores:\nPlayer - {}\nComputer - {}", player_score, computer_score);
 }
 
 fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Vec<Card>, final_turn: bool) -> bool{
