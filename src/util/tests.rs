@@ -5,6 +5,7 @@ use crate::round_aids::lay_down::{calculate_score};
 
 // A funtion to run through a simmulated hand & check the score to be able to output test info. 
 pub fn test_scores() {
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     let mut test_hand: Vec<Card> = Vec::new(); // The test hand in vector form
 
     // Adds a simmulated set of cards
@@ -17,6 +18,7 @@ pub fn test_scores() {
     test_hand.push(create_card(Suit::Spade, Value::Seven, 7));
     test_hand.push(create_card(Suit::Spade, Value::Eight, 8));
 
+    // Ch 6, Section 2, Unsigned Int
     // Finds the score
     let mut test_score = calculate_score(&test_hand);
 
