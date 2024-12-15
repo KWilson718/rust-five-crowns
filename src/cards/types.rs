@@ -1,4 +1,6 @@
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+// This enum holds the different options for suits that cards may have
+// An enum type was chosen to show an abstraction of data choices
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)] // These are rust language specific derivations that allow for good usage of the enum throughout the program
 pub enum Suit {
     Wild,
     Star,
@@ -8,7 +10,9 @@ pub enum Suit {
     Heart,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+// This enum holds the different options for what a card's value may be
+// An enum type was chosen to show an abstraction of data choices
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)] // These are rust language specific derivations that allow for good usage of the enum throughout the program
 pub enum Value {
     Three,
     Four,
@@ -24,7 +28,9 @@ pub enum Value {
     Wild,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+// This struct represents a card, with the suit being an enum, and the value being represented across three variables due to how diferent parts of the program use it
+// A struct type was the clear choice for how to abstract the data about the card, since it allows for quick & easy reference of different variable types inside of a single collection which then plays well with being put into arrays, hashes, etc...
+#[derive(Debug, Clone, PartialEq, Eq, Hash)] // These are rust language specific derivations that allow for good usage of the struct throughout the program
 pub struct Card {
     pub suit: Suit,
     pub value: Value,
@@ -32,6 +38,7 @@ pub struct Card {
     pub alpha_value: String,
 }
 
+// This is the constructor for a card, which is necessary to custom define since it turns the alpha_value into a string literal through the .to_string() being used
 impl Card {
     pub fn new(suit: Suit, value: Value, numeric_value: u8, alpha_value: &str) -> Self {
         Card {
@@ -41,32 +48,4 @@ impl Card {
             alpha_value: alpha_value.to_string(),
         }
     }
-
-    // Uncomment when necessary 
-    // pub fn describe(&self) {
-    //     println!("Suit: {:?}", self.suit);
-    //     println!("Value: {:?}", self.value);
-    //     println!("Numeric Value: {}", self.numeric_value);
-    //     println!("Alphabetical Value: {}", self.alpha_value);
-    // }
 }
-
-// impl Clone for Card {
-//     fn clone(&self) -> Self {
-//         Card {
-//             suit: self.suit,
-//             value: self.value,
-//             numeric_value: self.numeric_value,
-//             alpha_value: self.alpha_value.clone(), // Clone the String
-//         }
-//     }
-// }
-
-// impl PartialEq for Card {
-//     fn eq(&self, other: &Self) -> bool {
-//         self.suit == other.suit &&
-//         self.value == other.value &&
-//         self.numeric_value == other.numeric_value &&
-//         self.alpha_value == other.alpha_value
-//     }
-// }
