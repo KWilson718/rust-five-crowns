@@ -11,8 +11,10 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
 
     println!("Current Scores:\nPlayer - {}\nComputer - {}", player_score, computer_score); // Message to inform about current scores
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     let mut discard_pile: Vec<Card> = Vec::new(); // Vector of cards representing the discard pile
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Logic to create & shuffle a deck of cards which uses a vector to handle the data structure of card
     // The variable size of it really assists representing a deck of cards, which changes in size all the time
     // Additionally, the shuffle feature is made really simple with the vector, since it can use a built in library to do an O(n) shuffle of the deck!
@@ -21,17 +23,21 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
 
     println!("Deck is Shuffled & Ready, Dealing Cards\n"); // Message to show that the deck was successfully constructed
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Vectors of cards used to represent the player and computer hand
     // Vectors in this case worked well since it allows for simple indexing, as well as removal and addition of cards throughout the round
     let mut player_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
     let mut computer_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
 
+    // Ch 6, Section 7 - Structs used in data structure formation of type records
     // Puts a single card from the top of the deck into the discard pile to allow for the first player to have a choice of where to draw from
     let discard_pile_start = draw_card(&mut deck);
     discard_pile.push(discard_pile_start);
 
+    // Ch 6, Section 2, Primitive Types - Boolean Values
     let pre_lay_down: bool = true; // Boolean used to hold the while loop in an active state until one of the checks breaks out of it
 
+    // Ch 6, Section 2, Primitive Types - Boolean Values
     let mut player_down_first = false; // Boolean used to track if the player or computer laid down cards first to allow for the other to take one more turn
 
     // While loop used to repeatedly call the player turn & computer turn functions until one lays down their hand
@@ -55,6 +61,7 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
     // Handles allowing the player who didn't lay down first to have a single turn more before tallying up their score
     if player_down_first { // Case of if the player was the one to lay down first, signaling the computer to be able to take one final turn
         if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  { // If the computer cannot lay down after one more turn
+            // Ch 6, Section 2, Primitive Data Values - Unsigned Integers used since no need to have negatives
             let final_computer_score = calculate_score(&computer_hand); // Tallies up the score of the computer
             
             // outputs the final hand of the computer to show to the player
@@ -77,10 +84,12 @@ pub fn round(player_score: &mut u32, computer_score: &mut u32, hand_size: usize)
 // It is both useful for testing how the turns run, as well as giving an introductory round for new players
 pub fn test_round() {
 
+    // Ch 6, Section 2, Primitive Data Values - Unsigned Integers used since no need to have negatives
     // Starts both player and computer scores to zero
     let mut player_score: u32 = 0;
     let mut computer_score: u32 = 0;
 
+    // Ch 6, Section 3, Strings
     // Prompts the user for a number representing one of the valid handsizes of the game & then runs with that size for the rest of the round
     let hand_size_str = "Enter the number of cards you want in your hand\nMin 3\nMax 13";
     let hand_size: usize = prompt_for_number(hand_size_str, 3, 13).into();
@@ -89,8 +98,10 @@ pub fn test_round() {
 
     println!("Current Scores:\nPlayer - {}\nComputer - {}", player_score, computer_score); // Output message to show starting scores are zero
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     let mut discard_pile: Vec<Card> = Vec::new(); // Vector of cards representing the discard pile
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Logic to create & shuffle a deck of cards which uses a vector to handle the data structure of card
     // The variable size of it really assists representing a deck of cards, which changes in size all the time
     // Additionally, the shuffle feature is made really simple with the vector, since it can use a built in library to do an O(n) shuffle of the deck!
@@ -99,17 +110,21 @@ pub fn test_round() {
 
     println!("Deck is Shuffled & Ready, Dealing Cards\n"); // Message to show that the deck was successfully constructed
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Vectors of cards used to represent the player and computer hand
     // Vectors in this case worked well since it allows for simple indexing, as well as removal and addition of cards throughout the round
     let mut player_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
     let mut computer_hand = draw_hand(&mut deck, hand_size.try_into().unwrap());
 
+    // Ch 6, Section 7 - Structs used in data structure formation of type records
     // Puts a single card from the top of the deck into the discard pile to allow for the first player to have a choice of where to draw from
     let discard_pile_start = draw_card(&mut deck);
     discard_pile.push(discard_pile_start);
 
+    // Ch 6, Section 2, Primitive Types - Boolean Values
     let pre_lay_down: bool = true; // Boolean used to hold the while loop in an active state until one of the checks breaks out of it
 
+    // Ch 6, Section 2, Primitive Types - Boolean Values
     let mut player_down_first = false; // Boolean used to track if the player or computer laid down cards first to allow for the other to take one more turn
 
     // While loop used to repeatedly call the player turn & computer turn functions until one lays down their hand
@@ -133,6 +148,7 @@ pub fn test_round() {
     // Handles allowing the player who didn't lay down first to have a single turn more before tallying up their score
     if player_down_first { // Case of if the player was the one to lay down first, signaling the computer to be able to take one final turn
         if !computer_turn(&mut computer_hand, &mut deck, &mut discard_pile)  { // If the computer cannot lay down after one more turn
+            // Ch 6, Section 2, Primitive Data Values - Unsigned Integers used since no need to have negatives
             let final_computer_score = calculate_score(&computer_hand); // Tallies up the score of the computer
             
             // outputs the final hand of the computer to show to the player
@@ -171,6 +187,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // This cloned card is then used to output to the player what the top of the discard pile is, so that they may choose to draw it
     // Due to the way that rust handles ownership and the likes, it is necessary to handle it this way
     if let Some(top_card_raw) = discard_pile.last_mut() {
+        // Ch 6, Section 7 - Structs used in data structure formation of type records
         let top_card: Vec<Card> = vec![top_card_raw.clone()];
         display_cards(&top_card);
     } else {
@@ -181,6 +198,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     println!("Your Current Hand Is:");
     display_cards(hand);
 
+    // Ch 6, Section 2 & 3 - String used to have a prompt for the user, and an unsigned int used to hold the response while not needing negatives
     // Prompts the user for a numerical choice of what pile they want to discard from.
     // 1 represents drawing from the top of the deck
     // 2 represents drawing from the top of the discard pile
@@ -189,10 +207,12 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
 
     // draws a card from the appropriate pile given the decision made above
     if draw_decision == 1 { // draws from the top of the deck
+        // Ch 6, Section 7 - Structs used in data structure formation of type records
         let card = draw_card(deck);
         hand.push(card);
     }
     else { // draws from the top of the discard pile
+        // Ch 6, Section 7 - Structs used in data structure formation of type records
         let card = draw_card(discard_pile);
         hand.push(card);
     }
@@ -205,6 +225,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
     // Handles what the player can do regarding choosing a card to discard, since it can vary based on if it is or isn't the final round
     if !final_turn{ // If it is a normal turn
 
+        // Ch 6, Section 2 & 3 - String used to have a prompt for the user, and an unsigned int used to hold the response while not needing negatives
         // Prompts the user for an "index" of the card they wish to discard
         // The index of hand positions starts at 1, since 0 is reserved for laying down
         let discard_instructions_str = "Enter 0 if you are ready to try to lay down your hand, or...\nEnter the number representing the position of the card that you wish to discard.";
@@ -213,6 +234,7 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
         // Based on the previous input, either a card is discarded, or an attempt at laying down is made
         if discard_index > 0 { // Standard option where a choice of card is made to discard
 
+            // Ch 6, Section 7 - Structs used in data structure formation of type records
             // Pulls the card from the hand & adds it to the discard pile
             let discarded_card = hand.remove((discard_index - 1).into());
             discard_card(discard_pile, discarded_card);
@@ -220,15 +242,18 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
         }   
         else { // Choice for making an attempt to lay down
 
+            // Ch 6, Section 2 & 3 - String used to have a prompt for the user, and an unsigned int used to hold the response while not needing negatives
             // Prompts the user for the index of the card they want to have as a discard before laying down
             let secondary_discard_str = "Enter the number representing the position of the card that you wish to discard.";
             let secondary_discard_index = prompt_for_number(secondary_discard_str, 1, hand.len().try_into().unwrap());
 
+            // Ch 6, Section 7 - Structs used in data structure formation of type records
             // Pulls the card from the hand & adds it to the discard pile
             let discarded_card = hand.remove((secondary_discard_index - 1).into());
             discard_card(discard_pile, discarded_card);
             println!("Discarded a card");
 
+            // Ch 6, Section 2, Boolean Value to represent a binary switch
             // Boolean represntation of if they can lay down or not
             let lay_down = check_if_lay_down(hand, true);
 
@@ -236,16 +261,20 @@ fn player_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut Ve
         }
     
     } else { // if it is the final turn
+
+        // Ch 6, Section 2 & 3 - String used to have a prompt for the user, and an unsigned int used to hold the response while not needing negatives
         // Prompts the user for an "index" of the card they wish to discard
         // The index of hand positions starts at 1, since 0 is reserved for laying down, though 0 is not present in this case since this is the last round
         let discard_instructions_str = "Enter the number representing the position of the card that you wish to discard as your final discard for the turn.";
         let discard_index = prompt_for_number(discard_instructions_str, 1, hand.len().try_into().unwrap());
 
+        // Ch 6, Section 7 - Structs used in data structure formation of type records
         // Pulls the card from the hand & adds it to the discard pile
         let discarded_card = hand.remove((discard_index - 1).into());
         discard_card(discard_pile, discarded_card);
         println!("Discarded a card");
 
+        // Ch 6, Section 2, Boolean Value to represent a binary switch
         // Boolean represntation of if they can lay down or not
         let lay_down = check_if_lay_down(hand, true);
 
@@ -260,20 +289,25 @@ fn computer_turn(hand: &mut Vec<Card>, deck: &mut Vec<Card>, discard_pile: &mut 
 
     println!("\nComputer Turn Started, Drawing Card"); // Signals that the computer turn has started
 
+    // Ch 6, Section 7 - Structs used in data structure formation of type records
     // Draws a card from the top of the deck at all times
     let card = draw_card(deck);
     hand.push(card);
 
     // Discards a card at an index that is generated using the optimized_computer_discard function
     if !hand.is_empty() {
+        // Ch 6, Section 2, Unsigned Int used for index where negative number isn't necessary
         let discard_index = optimized_computer_discard(hand);
+        // Ch 6, Section 7 - Structs used in data structure formation of type records
         let discarded_card = hand.remove(discard_index);
-        discard_card(discard_pile, discarded_card); // Pass the owned card
+
+        discard_card(discard_pile, discarded_card); // Pass the card to the discard pile
         println!("Discarded a card:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     } else {
         println!("No cards to discard.");
     }
 
+    // Ch 6, Section 2, Boolean Value to represent a binary switch
     // Attempts to lay down each turn, with this boolean representing if it can or can't
     let lay_down = check_if_lay_down(hand, false);
 
