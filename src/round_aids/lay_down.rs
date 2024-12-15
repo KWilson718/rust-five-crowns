@@ -9,16 +9,17 @@ use crate::cards::types::{Card, Value, Suit};
 // The requirement here is that the score of the player's hand needs to be zero, showing that they can turn the full hand into groups of runs or books
 pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
 
-    let clear_for_lay_down = calculate_score(&hand); // Fetches the score from the calculate score function
+    // Ch 6, Section 2, Unsigned Int used here to represent the score for further checks
+    let current_score = calculate_score(&hand); // Fetches the score from the calculate score function
 
     // In order to provide clarity to the player, further output information is added when the is_player bool indicates that this is being called by a player
     // When it is a player, it outputs the score, and states if it can or can't lay down, triggering the lay down functionality if it can
     // When it's just the computer, it simply returns a bool based on the condition of if the score is zero, as to prevent giving the player hidden information abt the computer's hand
     if is_player {
-        println!("The Calculate Score Function Returned: {}", clear_for_lay_down);
+        println!("The Calculate Score Function Returned: {}", current_score);
 
         // Handles whether or not the player can lay down, and returning the result
-        if clear_for_lay_down == 0 {
+        if current_score == 0 {
             println!("Successfully Laid Down Cards\n");
             return true;
         } else {
@@ -26,7 +27,7 @@ pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
             return false;
         }
     } else {
-        return clear_for_lay_down == 0;
+        return current_score == 0;
     }
 
     
@@ -34,14 +35,17 @@ pub fn check_if_lay_down(hand: &mut Vec<Card>, is_player: bool) -> bool {
 
 // Discard optimized card function, to provide a selection for which card the computer should discard at the end of its turn
 pub fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
+    // Ch 6, Section 2, Unsigned Integers used to represent non-negative whole numbers effectively
     let mut min_score = u32::MAX; // Initialize to the maximum possible score, set to the maximum for ease
     let mut discard_index = 0; // Initialize the index to discard
 
     for i in 0..hand.len() {
+        // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
         // Create a temporary hand without the current index i card
         let mut temp_hand = hand.clone();
         temp_hand.remove(i);
 
+        // Ch 6, Section 2, Unsigned Int
         // Calculate the score of the temporary hand
         let temp_score = calculate_score(&temp_hand);
 
@@ -60,17 +64,22 @@ pub fn optimized_computer_discard(hand: &mut Vec<Card>) -> usize {
 // Works to group cards into books & runs, using wild cards throughout them to best optimize a hand
 // Returns a u32 representation of the score. u32 was used in this case since it needs to be a large number, and negative numbers aren't in the range of potential scores
 pub fn calculate_score(hand: &Vec<Card>) -> u32 {
+    
+    // Ch 6, Section 2 integer used to represent the length of the hand
     // Round's wild card value is based on hand size and is stored in this variable
     let current_wild_number = hand.len(); 
 
+    // Ch 6, Sections 6 & 7, Illustrates how a HashMap using data in struct form from Vectors ends up demonstrating complex interactions between these data types & structures 
     // A HashMap used to store the various groups of cards that will then be tested to form a group for scoring
     let mut value_groups: HashMap<Value, Vec<&Card>> = HashMap::new();
     let mut suit_groups: HashMap<Suit, Vec<&Card>> = HashMap::new();
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Vectors that will contain the wild cards to demonstrate which ones exist, as well as which ones have been used
     let mut wild_cards: Vec<&Card> = Vec::new(); // Collection to hold wild cards
     let mut used_wild_cards: Vec<&Card> = Vec::new(); // Collection to hold used wild cards
 
+    // Ch 6, Section 4, Enumeration type used here to represent something that has further semantic meaning & benefits from hardset types
     // Determine the current round's wild card value
     let round_wild_card = match current_wild_number {
         3 => Value::Three,
@@ -97,6 +106,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         }
     }
 
+    // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
     // Holder vector for collecting which cards have been used in the various groups
     let mut grouped_cards: Vec<&Card> = vec![];
 
@@ -104,6 +114,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
     form_books(&mut value_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
     form_runs(&mut suit_groups, &mut wild_cards, &mut grouped_cards, &mut used_wild_cards, round_wild_card);
 
+    // Ch 6, Sections 6 & 7, Illustrates how a HashMap using data in struct form from Vectors ends up demonstrating complex interactions between these data types & structures 
     // Creates a set of grouped cards to easily check exclusion from scoring, as well as one of used wilds for the same purpose
     let grouped_card_set: HashSet<_> = grouped_cards.iter().collect();
     let mut used_wild_card_set: HashSet<_> = used_wild_cards.iter().collect();
@@ -113,7 +124,7 @@ pub fn calculate_score(hand: &Vec<Card>) -> u32 {
         used_wild_card_set.extend(wild_cards.iter()); // Represents the rest of the wilds getting tossed into random groups to finish out
     }
 
-    
+    // Ch 6, Section 2, Unsigned Integer of medium size used to allow for the score to build up to a decently large number, knowing that there is no need for negative numbers
     // Compute the final score, ensuring grouped cards are excluded
     let score: u32 = hand.iter().filter(|card| !grouped_card_set.contains(card) && !used_wild_card_set.contains(card)).map(|card| { // Only uses cards that aren't fit into groups at all
         match card.value { // Finds the correct value & adds it to the score
@@ -141,8 +152,10 @@ fn form_books<'a>(
             // This statement below works to handle the wild cards that are necessary to fill in the group
             // By having this functionality in, it is able to handle using wild cards effectively like one would in game
             if group.len() < 3 {
+                // Ch 6, Section 2, Integers used here since they provide a way to count with efficient sizing
                 let wilds_needed = 3 - group.len();
                 for _ in 0..wilds_needed {
+                    // Ch 6, Section 7 - Structs used in data structure formation of type records
                     if let Some(wild_card) = wild_cards.pop() {
                         grouped_cards.push(wild_card);
                         used_wild_cards.push(wild_card);
@@ -164,12 +177,14 @@ fn form_runs<'a>(
     for (_, group) in suit_groups.iter_mut() { // Loops through each provided group of equally suited cards
         group.sort_by_key(|card| card.numeric_value); // Sorts through the cards to effectively order them for checking
 
+        // Ch 6, Section 6 & 7 - Vector & Structs used in abstract references & data structure formation
         let mut current_run: Vec<&Card> = Vec::new(); // Temporary vector to hold a run while being constructed
         let mut remaining_wilds = wild_cards.clone(); // Temporary vector to handle allocation of wild cards
 
         // The following loop processes through cards in a group in order to check if there is a potential run
         for (i, card) in group.iter().enumerate() {
 
+            // Ch 6, Section 2, Integers used here to be able to store the values in a quickly referencable manner
             let current_value = card.numeric_value; // Variable to hold the current numeric value of the card being checked
             let prev_value = if i == 0 { current_value } else { current_run.last().unwrap().numeric_value + 1 }; // Used to hold the previous card's value for various checks throughout the run
 
@@ -177,15 +192,18 @@ fn form_runs<'a>(
             if current_value == prev_value { // If the next card lines up neatly with the the previous one in the series
                 current_run.push(*card);
             } else if current_value == prev_value + 1 && remaining_wilds.len() >= 1{ // If there is a gap of one card between two cards (one wild necessary)
+                // Ch 6, Section 7 - Structs used in data structure formation of type records
                 if let Some(wild_card) = remaining_wilds.pop() { // Grabs a wild card to be used to fill the gap
                     current_run.push(wild_card);
                     used_wild_cards.push(wild_card);
                 }
                 current_run.push(*card);
             } else if current_value > prev_value + 1 { // A catch for when there is a larger than one card gap between two cards
+                // Ch 6, Section 2, Integers used here to be able to store the values in a quickly referencable manner
                 let gap_size = (current_value - prev_value - 1) as usize; // Calculates the actual size of the gap itself
                 if remaining_wilds.len() >= gap_size { // Checks if there are enough wild cards to fill the gap
                     for _ in 0..gap_size { // fills the gap with wild cards if possible
+                        // Ch 6, Section 7 - Structs used in data structure formation of type records
                         if let Some(wild_card) = remaining_wilds.pop() {
                             current_run.push(wild_card);
                             used_wild_cards.push(wild_card);
